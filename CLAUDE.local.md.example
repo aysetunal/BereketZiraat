@@ -1,0 +1,7 @@
+# Local Config — Do Not Push
+# Bu dosyayı kopyala → CLAUDE.local.md adıyla kaydet, kendi yollarını gir.
+
+## Screenshot Workflow
+- Puppeteer: `C:/Users/KULLANICI_ADIN/AppData/Local/Temp/puppeteer-test/`
+- Chrome cache: `C:/Users/KULLANICI_ADIN/.cache/puppeteer/`
+- Screenshot command: `node screenshot.mjs http://localhost:3000`

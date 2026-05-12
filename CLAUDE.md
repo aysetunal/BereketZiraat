@@ -23,8 +23,8 @@
 - Sunucu zaten çalışıyorsa ikinci instance başlatma.
 
 ## Screenshot Workflow
-- Puppeteer: `C:/Users/AYSE/AppData/Local/Temp/puppeteer-test/`
-- Chrome cache: `C:/AYSE/.cache/puppeteer/`
+- Puppeteer ve Chrome cache yolları: **CLAUDE.local.md** dosyasına bak (makineye özel, git'e girmez)
+- Kurulum için: `CLAUDE.local.md.example` dosyasını kopyala → `CLAUDE.local.md` adıyla kaydet, kendi yollarını gir.
 - Screenshot komutu: `node screenshot.mjs http://localhost:3000`
 - Kayıt yeri: `./temporary screenshots/screenshot-N.png` (otomatik numaralandırılır)
 - Etiketli kayıt: `node screenshot.mjs http://localhost:3000 etiket`
