@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bereket Ziraat Limited Şirketi | Gübre Çözümleri</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700;1,800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --c-green-950: #0D2006;
+      --c-green-900: #1A3D08;
+      --c-green-800: #2A5E12;
+      --c-green-700: #3D8A1C;
+      --c-green-600: #4EA624;
+      --c-amber-700: #C97A08;
+      --c-amber-500: #E8920F;
+      --c-amber-300: #F5B94D;
+      --c-cream-100: #F7F2E7;
+      --c-cream-200: #EDE7D5;
+      --c-cream-300: #DDD5C0;
+      --c-text: #1C1108;
+      --c-text-muted: #4A3F2F;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--c-cream-100);
+      color: var(--c-text);
+      line-height: 1.7;
+    }
+
+    h1, h2, h3, .serif { font-family: 'Playfair Display', serif; }
+
+    /* ── Grain overlay ── */
+    .grain::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ── Nav ── */
+    #navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1rem 2rem;
+      transition: background-color 0.35s ease, box-shadow 0.35s ease, padding 0.35s ease;
+    }
+    #navbar.scrolled {
+      background-color: var(--c-green-900);
+      box-shadow: 0 4px 32px rgba(0,0,0,0.3);
+      padding: 0.75rem 2rem;
+    }
+    .nav-link {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      transition: color 0.2s ease;
+    }
+    .nav-link:hover { color: var(--c-amber-300); }
+    .nav-link:focus-visible { outline: 2px solid var(--c-amber-300); border-radius: 2px; outline-offset: 3px; }
+
+    /* ── Buttons ── */
+    .btn-amber {
+      display: inline-block;
+      background-color: var(--c-amber-500);
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 0.75rem 1.75rem;
+      border-radius: 4px;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      border: none;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background-color 0.2s ease, transform 0.15s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s ease;
+    }
+    .btn-amber:hover {
+      background-color: var(--c-amber-700);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(201,122,8,0.45);
+    }
+    .btn-amber:active { transform: translateY(0); box-shadow: none; }
+    .btn-amber:focus-visible { outline: 3px solid var(--c-amber-300); outline-offset: 3px; }
+
+    .btn-outline {
+      display: inline-block;
+      border: 2px solid rgba(255,255,255,0.55);
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 0.75rem 1.75rem;
+      border-radius: 4px;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.15s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .btn-outline:hover {
+      border-color: #fff;
+      background-color: rgba(255,255,255,0.1);
+      transform: translateY(-2px);
+    }
+    .btn-outline:active { transform: translateY(0); }
+    .btn-outline:focus-visible { outline: 3px solid var(--c-amber-300); outline-offset: 3px; }
+
+    /* ── Section accent bar ── */
+    .section-accent {
+      display: inline-block;
+      width: 44px;
+      height: 3px;
+      background-color: var(--c-amber-500);
+      border-radius: 2px;
+      margin-bottom: 0.875rem;
+    }
+
+    /* ── Product cards ── */
+    .product-card {
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease, background-color 0.25s ease;
+    }
+    .product-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 28px 56px rgba(10,30,5,0.4), 0 8px 20px rgba(10,30,5,0.25);
+      background-color: rgba(255,255,255,0.1) !important;
+    }
+    .product-card:focus-visible { outline: 3px solid var(--c-amber-300); border-radius: 10px; }
+
+    /* ── Feature cards ── */
+    .feature-card {
+      transition: transform 0.25s ease, background-color 0.25s ease;
+    }
+    .feature-card:hover { transform: translateY(-5px); background-color: var(--c-green-800) !important; }
+
+    /* ── Stat value ── */
+    .stat-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      font-weight: 900;
+      line-height: 1;
+      color: var(--c-amber-500);
+    }
+
+    /* ── Category tag ── */
+    .cat-tag {
+      display: inline-block;
+      padding: 0.2rem 0.65rem;
+      border-radius: 2px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* ── Fade-up animation ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── Process step card ── */
+    .step-card {
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .step-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(42,94,18,0.15), 0 4px 12px rgba(42,94,18,0.08);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr !important; }
+      .about-grid { grid-template-columns: 1fr !important; }
+      .contact-grid { grid-template-columns: 1fr !important; }
+      .footer-grid { grid-template-columns: 1fr 1fr !important; }
+      .product-grid { grid-template-columns: 1fr 1fr !important; }
+      .feature-grid { grid-template-columns: 1fr 1fr !important; }
+      .stats-grid { grid-template-columns: 1fr 1fr !important; }
+      .hero-right { display: none !important; }
+      .step-grid { grid-template-columns: 1fr !important; }
+    }
+    @media (max-width: 600px) {
+      .product-grid { grid-template-columns: 1fr !important; }
+      .feature-grid { grid-template-columns: 1fr !important; }
+      .stats-grid { grid-template-columns: 1fr 1fr !important; }
+      .footer-grid { grid-template-columns: 1fr !important; }
+      .desktop-nav { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ════════════════ NAVIGATION ════════════════ -->
+  <nav id="navbar">
+    <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;">
+      <a href="#" style="display:flex;align-items:center;gap:0.75rem;text-decoration:none;">
+        <img src="brand_assets/logo.png" alt="Bereket Ziraat" style="height:54px;width:54px;object-fit:contain;">
+        <div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:800;color:#fff;line-height:1.15;letter-spacing:0.01em;">BEREKET ZİRAAT</div>
+          <div style="font-size:0.62rem;color:rgba(255,255,255,0.5);letter-spacing:0.14em;text-transform:uppercase;">Limited Şirketi</div>
+        </div>
+      </a>
+      <div class="desktop-nav" style="display:flex;align-items:center;gap:2rem;">
+        <a href="#hakkimizda" class="nav-link">Hakkımızda</a>
+        <a href="#urunler" class="nav-link">Ürünlerimiz</a>
+        <a href="#neden-bereket" class="nav-link">Neden Bereket?</a>
+        <a href="#iletisim" class="nav-link">İletişim</a>
+        <a href="#iletisim" class="btn-amber" style="padding:0.55rem 1.25rem;font-size:0.85rem;">Teklif Al</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ════════════════ HERO ════════════════ -->
+  <section class="grain" style="position:relative;min-height:100vh;display:flex;align-items:center;padding:8rem 2rem 5rem;overflow:hidden;background:radial-gradient(ellipse at 65% 25%,rgba(78,166,36,0.16) 0%,transparent 55%),radial-gradient(ellipse at 15% 75%,rgba(42,94,18,0.22) 0%,transparent 50%),var(--c-green-900);">
+
+    <!-- decorative large circle -->
+    <div style="position:absolute;right:-160px;top:50%;transform:translateY(-50%);width:640px;height:640px;border-radius:50%;border:1px solid rgba(255,255,255,0.04);pointer-events:none;"></div>
+    <div style="position:absolute;right:-100px;top:50%;transform:translateY(-50%);width:500px;height:500px;border-radius:50%;border:1px solid rgba(255,255,255,0.06);pointer-events:none;"></div>
+
+    <!-- diagonal gradient overlay -->
+    <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(13,32,6,0.55) 0%,transparent 55%);pointer-events:none;"></div>
+
+    <div style="max-width:1200px;margin:0 auto;width:100%;position:relative;z-index:2;">
+      <div class="hero-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;">
+
+        <!-- Left -->
+        <div>
+          <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.5rem;">
+            <div style="width:36px;height:2px;background:var(--c-amber-500);border-radius:2px;"></div>
+            <span style="color:var(--c-amber-300);font-size:0.78rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;">Tarımsal Gübre Uzmanı</span>
+          </div>
+
+          <h1 style="font-size:clamp(2.4rem,4.8vw,3.8rem);font-weight:900;color:#fff;line-height:1.1;margin-bottom:1.5rem;letter-spacing:-0.025em;">
+            Toprağınıza<br>
+            <em style="color:var(--c-amber-300);font-style:italic;">Bereket,</em><br>
+            Hasadınıza Güç
+          </h1>
+
+          <p style="font-size:1.05rem;color:rgba(255,255,255,0.7);max-width:460px;margin-bottom:2.5rem;line-height:1.75;">
+            25 yılı aşkın tecrübe ve güvenilir formülasyonlarla Türk çiftçisinin yanındayız. Toprak analizinden ürün seçimine, teslimatten sonrası desteğe kadar tam hizmet sunuyoruz.
+          </p>
+
+          <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+            <a href="#urunler" class="btn-amber">Ürünleri Keşfet</a>
+            <a href="#hakkimizda" class="btn-outline">Bizi Tanıyın</a>
+          </div>
+
+          <!-- mini stats row -->
+          <div style="display:flex;gap:2.5rem;margin-top:3rem;padding-top:2.5rem;border-top:1px solid rgba(255,255,255,0.1);">
+            <div>
+              <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--c-amber-300);line-height:1;">25+</div>
+              <div style="color:rgba(255,255,255,0.5);font-size:0.78rem;margin-top:0.2rem;font-weight:500;">Yıl Tecrübe</div>
+            </div>
+            <div style="width:1px;background:rgba(255,255,255,0.1);"></div>
+            <div>
+              <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--c-amber-300);line-height:1;">500+</div>
+              <div style="color:rgba(255,255,255,0.5);font-size:0.78rem;margin-top:0.2rem;font-weight:500;">Ürün Çeşidi</div>
+            </div>
+            <div style="width:1px;background:rgba(255,255,255,0.1);"></div>
+            <div>
+              <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--c-amber-300);line-height:1;">10K+</div>
+              <div style="color:rgba(255,255,255,0.5);font-size:0.78rem;margin-top:0.2rem;font-weight:500;">Mutlu Çiftçi</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: hero visual -->
+        <div class="hero-right" style="position:relative;">
+          <!-- main image card -->
+          <div style="border-radius:10px;overflow:hidden;box-shadow:0 32px 72px rgba(0,0,0,0.45),0 8px 24px rgba(0,0,0,0.3);">
+            <div style="position:relative;">
+              <img src="https://placehold.co/580x480/2A5E12/3D8A1C" alt="Gübre ürünleri" style="width:100%;height:460px;object-fit:cover;display:block;filter:brightness(0.82) saturate(1.1);">
+              <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(13,32,6,0.75) 0%,rgba(13,32,6,0.1) 60%,transparent 100%);pointer-events:none;"></div>
+              <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(42,94,18,0.3),transparent 60%);pointer-events:none;mix-blend-mode:multiply;"></div>
+              <!-- overlay label -->
+              <div style="position:absolute;bottom:1.5rem;left:1.5rem;right:1.5rem;">
+                <div style="background:rgba(255,255,255,0.08);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:1.1rem 1.4rem;">
+                  <div style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:0.25rem;">Doğrudan Üreticiden</div>
+                  <div style="color:rgba(255,255,255,0.6);font-size:0.82rem;">Sertifikalı formülasyonlar, garantili kalite</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- floating badge -->
+          <div style="position:absolute;top:-22px;right:-22px;width:104px;height:104px;background:var(--c-amber-500);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 8px 28px rgba(201,122,8,0.55),0 2px 8px rgba(201,122,8,0.3);z-index:3;">
+            <div style="font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;color:#fff;line-height:1;">%100</div>
+            <div style="font-size:0.58rem;color:rgba(255,255,255,0.9);text-align:center;font-weight:700;letter-spacing:0.06em;line-height:1.3;margin-top:3px;">DOĞAL<br>FORMÜL</div>
+          </div>
+
+          <!-- small floating card -->
+          <div style="position:absolute;bottom:-28px;left:-28px;background:var(--c-green-800);border-radius:8px;padding:1.1rem 1.4rem;box-shadow:0 12px 32px rgba(0,0,0,0.3);z-index:3;">
+            <div style="display:flex;align-items:center;gap:0.75rem;">
+              <div style="width:40px;height:40px;background:rgba(232,146,15,0.15);border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(232,146,15,0.25);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--c-amber-500)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+              </div>
+              <div>
+                <div style="font-size:0.78rem;font-weight:700;color:#fff;">Tarım Bakanlığı Onaylı</div>
+                <div style="font-size:0.68rem;color:rgba(255,255,255,0.5);margin-top:2px;">Tüm ürünlerimiz ruhsatlıdır</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- scroll cue -->
+    <div style="position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);z-index:2;text-align:center;display:flex;flex-direction:column;align-items:center;gap:0.5rem;">
+      <div style="color:rgba(255,255,255,0.35);font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;">Keşfet</div>
+      <div style="width:1px;height:36px;background:linear-gradient(to bottom,rgba(255,255,255,0.35),transparent);"></div>
+    </div>
+  </section>
+
+  <!-- ════════════════ TRUST BAR ════════════════ -->
+  <section style="background:var(--c-amber-700);padding:0.9rem 2rem;overflow:hidden;">
+    <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:2rem;flex-wrap:wrap;">
+      <span style="color:#fff;font-size:0.8rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;white-space:nowrap;">&#9733; Sertifikalı Formülasyonlar</span>
+      <span style="color:rgba(255,255,255,0.35);">|</span>
+      <span style="color:#fff;font-size:0.8rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;white-space:nowrap;">&#9733; Tarım Bakanlığı Onaylı</span>
+      <span style="color:rgba(255,255,255,0.35);">|</span>
+      <span style="color:#fff;font-size:0.8rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;white-space:nowrap;">&#9733; Güvenilir Tedarik Zinciri</span>
+      <span style="color:rgba(255,255,255,0.35);">|</span>
+      <span style="color:#fff;font-size:0.8rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;white-space:nowrap;">&#9733; 81 İle Hızlı Teslimat</span>
+      <span style="color:rgba(255,255,255,0.35);">|</span>
+      <span style="color:#fff;font-size:0.8rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;white-space:nowrap;">&#9733; Ücretsiz Teknik Destek</span>
+    </div>
+  </section>
+
+  <!-- ════════════════ ABOUT ════════════════ -->
+  <section id="hakkimizda" style="padding:6rem 2rem;background:var(--c-cream-100);">
+    <div style="max-width:1200px;margin:0 auto;">
+      <div class="about-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;">
+
+        <!-- image mosaic -->
+        <div class="fade-up" style="position:relative;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+            <div style="grid-column:1/-1;border-radius:10px;overflow:hidden;box-shadow:0 16px 48px rgba(42,94,18,0.22),0 4px 12px rgba(42,94,18,0.1);">
+              <div style="position:relative;">
+                <img src="https://placehold.co/640x280/2A5E12/4EA624" alt="Tarla" style="width:100%;height:240px;object-fit:cover;display:block;filter:brightness(0.85) saturate(1.15);">
+                <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(42,94,18,0.35),transparent 60%);pointer-events:none;"></div>
+              </div>
+            </div>
+            <div style="border-radius:10px;overflow:hidden;box-shadow:0 12px 32px rgba(42,94,18,0.18);">
+              <img src="https://placehold.co/310x200/3D8A1C/4EA624" alt="Depo" style="width:100%;height:180px;object-fit:cover;display:block;filter:brightness(0.88);">
+            </div>
+            <div style="position:relative;border-radius:10px;overflow:hidden;box-shadow:0 12px 32px rgba(42,94,18,0.18);">
+              <img src="https://placehold.co/310x200/1A3D08/2A5E12" alt="Analiz" style="width:100%;height:180px;object-fit:cover;display:block;filter:brightness(0.88);">
+            </div>
+          </div>
+          <!-- experience badge -->
+          <div style="position:absolute;bottom:-20px;right:-20px;background:var(--c-green-900);border-radius:10px;padding:1.25rem 1.5rem;box-shadow:0 8px 28px rgba(0,0,0,0.28);z-index:2;">
+            <div style="font-family:'Playfair Display',serif;font-size:2.4rem;font-weight:900;color:var(--c-amber-500);line-height:1;">25+</div>
+            <div style="font-size:0.78rem;color:rgba(255,255,255,0.65);margin-top:0.3rem;font-weight:500;">Yıllık Tecrübe</div>
+          </div>
+        </div>
+
+        <!-- text content -->
+        <div class="fade-up" style="padding-left:0.5rem;">
+          <div class="section-accent"></div>
+          <span style="color:var(--c-amber-700);font-size:0.78rem;font-weight:700;letter-spacing:0.13em;text-transform:uppercase;display:block;margin-bottom:0.75rem;">Hakkımızda</span>
+          <h2 style="font-size:clamp(1.8rem,3vw,2.5rem);font-weight:800;color:var(--c-green-900);line-height:1.2;margin-bottom:1.5rem;letter-spacing:-0.02em;">
+            Türk Çiftçisinin<br>Güvenilir <em>Gübre Ortağı</em>
+          </h2>
+          <p style="color:var(--c-text-muted);line-height:1.8;margin-bottom:1.2rem;">
+            1999 yılından bu yana Türkiye'nin dört bir yanında çiftçilerimize yüksek kaliteli tarımsal gübre çözümleri sunmaktayız. Amacımız; toprak verimliliğini artırmak, sürdürülebilir tarımı desteklemek ve çiftçilerimizin gelirini maksimize etmektir.
+          </p>
+          <p style="color:var(--c-text-muted);line-height:1.8;margin-bottom:2rem;">
+            Uzman ziraat mühendislerimiz ve geniş ürün yelpazemizle toprak analizinden başlayarak hasada kadar her aşamada yanınızdayız.
+          </p>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:2.25rem;">
+            <div style="display:flex;align-items:flex-start;gap:0.7rem;">
+              <div style="width:7px;height:7px;background:var(--c-amber-500);border-radius:50%;margin-top:0.5rem;flex-shrink:0;"></div>
+              <div style="font-size:0.875rem;color:var(--c-text-muted);font-weight:500;line-height:1.5;">Tarım Bakanlığı Onaylı Ürünler</div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:0.7rem;">
+              <div style="width:7px;height:7px;background:var(--c-amber-500);border-radius:50%;margin-top:0.5rem;flex-shrink:0;"></div>
+              <div style="font-size:0.875rem;color:var(--c-text-muted);font-weight:500;line-height:1.5;">ISO Sertifikalı Üretim</div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:0.7rem;">
+              <div style="width:7px;height:7px;background:var(--c-amber-500);border-radius:50%;margin-top:0.5rem;flex-shrink:0;"></div>
+              <div style="font-size:0.875rem;color:var(--c-text-muted);font-weight:500;line-height:1.5;">Ücretsiz Toprak Analizi</div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:0.7rem;">
+              <div style="width:7px;height:7px;background:var(--c-amber-500);border-radius:50%;margin-top:0.5rem;flex-shrink:0;"></div>
+              <div style="font-size:0.875rem;color:var(--c-text-muted);font-weight:500;line-height:1.5;">Türkiye Geneli Teslimat</div>
+            </div>
+          </div>
+
+          <a href="#iletisim" class="btn-amber">Bizimle İletişime Geçin</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════ PRODUCTS ════════════════ -->
+  <section id="urunler" style="padding:6rem 2rem;background:var(--c-green-900);position:relative;overflow:hidden;">
+    <div style="position:absolute;top:-120px;right:-120px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(78,166,36,0.1) 0%,transparent 70%);pointer-events:none;"></div>
+    <div style="position:absolute;bottom:-100px;left:-80px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(78,166,36,0.07) 0%,transparent 70%);pointer-events:none;"></div>
+
+    <div style="max-width:1200px;margin:0 auto;position:relative;z-index:2;">
+
+      <div style="text-align:center;margin-bottom:3.5rem;" class="fade-up">
+        <div style="display:flex;justify-content:center;"><div class="section-accent"></div></div>
+        <span style="color:var(--c-amber-300);font-size:0.78rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;display:block;margin-bottom:0.75rem;">Ürün Kategorileri</span>
+        <h2 style="font-size:clamp(1.8rem,3vw,2.75rem);font-weight:800;color:#fff;letter-spacing:-0.02em;line-height:1.2;">
+          Her Bitkiye Uygun<br><em style="color:var(--c-amber-300);">Gübre Çözümü</em>
+        </h2>
+        <p style="color:rgba(255,255,255,0.58);max-width:540px;margin:1.25rem auto 0;font-size:0.975rem;line-height:1.7;">
+          Azotludan organike, yaprak gübrelerden toprak düzenleyicilere geniş ürün yelpazemizle tüm ihtiyaçlarınıza cevap veriyoruz.
+        </p>
+      </div>
+
+      <div class="product-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;">
+
+        <!-- Card: Azotlu -->
+        <div class="product-card fade-up" tabindex="0" style="background:rgba(255,255,255,0.055);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:2rem;cursor:pointer;backdrop-filter:blur(4px);">
+          <div style="width:54px;height:54px;background:rgba(232,146,15,0.14);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;border:1px solid rgba(232,146,15,0.22);">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--c-amber-500)" stroke-width="2" stroke-linecap="round"><path d="M12 2C8.5 2 5 5.1 5 9c0 5 7 13 7 13s7-8 7-13c0-3.9-3.5-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          </div>
+          <span class="cat-tag" style="background:rgba(232,146,15,0.14);color:var(--c-amber-300);border:1px solid rgba(232,146,15,0.22);">N — Azot</span>
+          <h3 style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:#fff;margin:0.75rem 0;">Azotlu Gübreler</h3>
+          <p style="color:rgba(255,255,255,0.52);font-size:0.875rem;line-height:1.72;margin-bottom:1.25rem;">Üre, Amonyum Nitrat, CAN ve daha fazlası. Bitkisel büyümeyi destekleyen yüksek etkinlikli azot formülasyonları.</p>
+          <div style="display:flex;gap:0.45rem;flex-wrap:wrap;">
+            <span style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);font-size:0.68rem;padding:0.18rem 0.55rem;border-radius:2px;">Üre %46</span>
+            <span style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);font-size:0.68rem;padding:0.18rem 0.55rem;border-radius:2px;">AN %26</span>
+            <span style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);font-size:0.68rem;padding:0.18rem 0.55rem;border-radius:2px;">CAN %27</span>
+          </div>
+          <div style="margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;">
+            <span style="color:var(--c-amber-300);font-size:0.8rem;font-weight:600;letter-spacing:0.04em;">Detayları Gör</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--c-amber-300)" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </div>
+        </div>
+
+        <!-- Card: Fosforlu -->
+        <div class="product-card fade-up" tabindex="0" style="background:rgba(255,255,255,0.055);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:2rem;cursor:pointer;backdrop-filter:blur(4px);">
+          <div style="width:54px;height:54px;background:rgba(78,166,36,0.14);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;border:1px solid rgba(78,166,36,0.22);">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#7DD655" stroke-width="2" stroke-linecap="round"><path d="M12 22V12M12 12C12 7 7 4 3 5.5M12 12C12 7 17 4 21 5.5M12 12C12 17 7 20 3 18.5M12 12C12 17 17 20 21 18.5"/></svg>
+          </div>
+          <span class="cat-tag" style="background:rgba(78,166,36,0.12);color:#9FE07A;border:1px solid rgba(78,166,36,0.22);">P — Fosfor</span>
+          <h3 style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:#fff;margin:0.75rem 0;">Fosforlu Gübreler</h3>
+          <p style="color:rgba(255,255,255,0.52);font-size:0.875rem;line-height:1.72;margin-bottom:1.25rem;">DAP, MAP ve Triple Süper Fosfat ile kök gelişimini güçlendirin. Erken dönem bitki beslenmesi için vazgeçilmez formülasyonlar.</p>
+          <div style="display:flex;gap:0.45rem;flex-wrap:wrap;">
+            <span style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);font-size:0.68rem;padding:0.18rem 0.55rem;border-radius:2px;">DAP</span>
+            <span style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);font-size:0.68rem;padding:0.18rem 0.55rem;border-radius:2px;">MAP</span>
+            <span style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);font-size:0.68rem;padding:0.18rem 0.55rem;border-radius:2px;">TSP</span>
+          </div>
+          <div style="margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;">
+            <span style="color:var(--c-amber-300);font-size:0.8rem;font-weight:600;letter-spacing:0.04em;">Detayları Gör</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--c-amber-300)" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </div>
+        </div>
+
+        <!-- Card: Potasyumlu -->
+        <div class="product-card fade-up" tabindex="0" style="background:rgba(255,255,255,0.055);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:2rem;cursor:pointer;backdrop-filter:blur(4px);">
+          <div style="width:54px;height:54px;background:rgba(201,122,8,0.14);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;border:1px solid rgba(201,122,8,0.22);">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--c-amber-700)" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+          </div>
+          <span class="cat-tag" style="background:rgba(201,122,8,0.12);color:#E8B96F;border:1px solid rgba(201,122,8,0.22);">K — Potasyum</span>
+          <h3 style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:#fff;margin:0.75rem 0;">Potasyumlu Gübreler</h3>
+          <p style="color:rgba(255,255,255,0.52);font-size:0.875rem;line-height:1.72;margin-bottom:1.25rem;">Potasyum Klorür ve Potasyum Sülfat ile meyve kalitesini ve hastalık direncini artırın. Sürdürülebilir tarım için ideal.</p>
+          <div style="display:flex;gap:0.45rem;flex-wrap:wrap;">
+            <span style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);font-size:0.68rem;padding:0.18rem 0.55rem;border-radius:2px;">MOP</span>
+            <span style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);font-size:0.68rem;padding:0.18rem 0.55rem;border-radius:2px;">SOP</span>
+            <span style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);font-size:0.68rem;padding:0.18rem 0.55rem;border-radius:2px;">KNO₃</span>
+          </div>
+          <div style="margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;">
+            <span style="color:var(--c-amber-300);font-size:0.8rem;font-weight:600;letter-spacing:0.04em;">Detayları Gör</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--c-amber-300)" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </div>
+        </div>
+
+        <!-- Card: Kompoze NPK -->
+        <div class="product-card fade-up" tabindex="0" style="background:rgba(255,255,255,0.055);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:2rem;cursor:pointer;backdrop-filter:blur(4px);">
+          <div style="width:54px;height:54px;background:rgba(232,146,15,0.1);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;border:1px solid rgba(232,146,15,0.18);">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--c-amber-500)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="8"/><line x1="12" y1="16" x2="12" y2="22"/><line x1="2" y1="12" x2="8" y2="12"/><line x1="16" y1="12" x2="22" y2="12"/></svg>
+          </div>
+          <span class="cat-tag" style="background:rgba(232,146,15,0.12);color:var(--c-amber-300);border:1px solid rgba(232,146,15,0.2);">NPK Kompoze</span>
+          <h3 style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:#fff;margin:0.75rem 0;">Kompoze Gübreler</h3>
+          <p style="color:rgba(255,255,255,0.52);font-size:0.875rem;line-height:1.72;margin-bottom:1.25rem;">Tek üründe azot, fosfor ve potasyum dengesi. 15-15-15, 20-20-0, 12-24-12 ve özel NPK formülasyonları ile tam beslenme.</p>
+          <div style="display:flex;gap:0.45rem;flex-wrap:wrap;">
+            <span style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);font-size:0.68rem;padding:0.18rem 0.55rem;border-radius:2px;">15-15-15</span>
+            <span style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);font-size:0.68rem;padding:0.18rem 0.55rem;border-radius:2px;">20-20-0</span>
+            <span style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);font-size:0.68rem;padding:0.18rem 0.55rem;border-radius:2px;">12-24-12</span>
+          </div>
+          <div style="margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;">
+            <span style="color:var(--c-amber-300);font-size:0.8rem;font-weight:600;letter-spacing:0.04em;">Detayları Gör</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--c-amber-300)" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </div>
+        </div>
+
+        <!-- Card: Yaprak -->
+        <div class="product-card fade-up" tabindex="0" style="background:rgba(255,255,255,0.055);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:2rem;cursor:pointer;backdrop-filter:blur(4px);">
+          <div style="width:54px;height:54px;background:rgba(78,166,36,0.1);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;border:1px solid rgba(78,166,36,0.18);">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#9FE07A" stroke-width="2" stroke-linecap="round"><path d="M12 22c0 0-8-5-8-12A8 8 0 0120 10c0 7-8 12-8 12z"/><path d="M12 10v12"/></svg>
+          </div>
+          <span class="cat-tag" style="background:rgba(78,166,36,0.1);color:#9FE07A;border:1px solid rgba(78,166,36,0.18);">Yapraktan Uygulama</span>
+          <h3 style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:#fff;margin:0.75rem 0;">Yaprak Gübreler</h3>
+          <p style="color:rgba(255,255,255,0.52);font-size:0.875rem;line-height:1.72;margin-bottom:1.25rem;">Hızlı etki ve yüksek verimlilik için yapraktan uygulama gübrelerimiz. Stres dönemlerinde bitkiye anında destek ve takviye.</p>
+          <div style="display:flex;gap:0.45rem;flex-wrap:wrap;">
+            <span style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);font-size:0.68rem;padding:0.18rem 0.55rem;border-radius:2px;">Makro</span>
+            <span style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);font-size:0.68rem;padding:0.18rem 0.55rem;border-radius:2px;">Mikro Element</span>
+            <span style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);font-size:0.68rem;padding:0.18rem 0.55rem;border-radius:2px;">Amino Asit</span>
+          </div>
+          <div style="margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;">
+            <span style="color:var(--c-amber-300);font-size:0.8rem;font-weight:600;letter-spacing:0.04em;">Detayları Gör</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--c-amber-300)" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </div>
+        </div>
+
+        <!-- Card: Organik -->
+        <div class="product-card fade-up" tabindex="0" style="background:rgba(255,255,255,0.055);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:2rem;cursor:pointer;backdrop-filter:blur(4px);">
+          <div style="width:54px;height:54px;background:rgba(201,122,8,0.12);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;border:1px solid rgba(201,122,8,0.2);">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#D4A050" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+          <span class="cat-tag" style="background:rgba(201,122,8,0.1);color:#E8B96F;border:1px solid rgba(201,122,8,0.18);">Organik &amp; Doğal</span>
+          <h3 style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:#fff;margin:0.75rem 0;">Organik Gübreler</h3>
+          <p style="color:rgba(255,255,255,0.52);font-size:0.875rem;line-height:1.72;margin-bottom:1.25rem;">Doğal kaynaklar ve organik madde zengin formülasyonlarımızla toprağın biyolojik yapısını güçlendirin. Sertifikalı organik tarım uyumlu.</p>
+          <div style="display:flex;gap:0.45rem;flex-wrap:wrap;">
+            <span style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);font-size:0.68rem;padding:0.18rem 0.55rem;border-radius:2px;">Hümik Asit</span>
+            <span style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);font-size:0.68rem;padding:0.18rem 0.55rem;border-radius:2px;">Fulvat</span>
+            <span style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);font-size:0.68rem;padding:0.18rem 0.55rem;border-radius:2px;">Organik-K</span>
+          </div>
+          <div style="margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;">
+            <span style="color:var(--c-amber-300);font-size:0.8rem;font-weight:600;letter-spacing:0.04em;">Detayları Gör</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--c-amber-300)" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="text-align:center;margin-top:3rem;" class="fade-up">
+        <a href="#iletisim" class="btn-amber">Tüm Ürün Kataloğunu İnceleyin</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════ WHY BEREKET ════════════════ -->
+  <section id="neden-bereket" style="padding:6rem 2rem;background:var(--c-cream-100);">
+    <div style="max-width:1200px;margin:0 auto;">
+
+      <div style="text-align:center;margin-bottom:3.5rem;" class="fade-up">
+        <div style="display:flex;justify-content:center;"><div class="section-accent"></div></div>
+        <span style="color:var(--c-amber-700);font-size:0.78rem;font-weight:700;letter-spacing:0.13em;text-transform:uppercase;display:block;margin-bottom:0.75rem;">Neden Bereket?</span>
+        <h2 style="font-size:clamp(1.8rem,3vw,2.75rem);font-weight:800;color:var(--c-green-900);letter-spacing:-0.02em;line-height:1.2;">
+          Tarımınıza Değer Katan <em>Farkımız</em>
+        </h2>
+      </div>
+
+      <div class="feature-grid fade-up" style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-bottom:3.5rem;">
+
+        <div class="feature-card" style="background:var(--c-green-900);border-radius:10px;padding:2rem 1.5rem;text-align:center;">
+          <div style="width:62px;height:62px;background:rgba(232,146,15,0.12);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;border:1px solid rgba(232,146,15,0.2);">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--c-amber-500)" stroke-width="1.75" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          </div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:#fff;margin-bottom:0.5rem;">Geniş Ürün Yelpazesi</div>
+          <p style="color:rgba(255,255,255,0.52);font-size:0.85rem;line-height:1.65;">500'den fazla ürün çeşidiyle her toprak tipine ve bitkiye uygun çözüm sunuyoruz.</p>
+        </div>
+
+        <div class="feature-card" style="background:var(--c-green-900);border-radius:10px;padding:2rem 1.5rem;text-align:center;">
+          <div style="width:62px;height:62px;background:rgba(78,166,36,0.12);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;border:1px solid rgba(78,166,36,0.2);">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#9FE07A" stroke-width="1.75" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+          </div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:#fff;margin-bottom:0.5rem;">Kalite Güvencesi</div>
+          <p style="color:rgba(255,255,255,0.52);font-size:0.85rem;line-height:1.65;">ISO sertifikalı üretim süreçleri ve Tarım Bakanlığı onaylı ürünlerle güvenilir gübre.</p>
+        </div>
+
+        <div class="feature-card" style="background:var(--c-green-900);border-radius:10px;padding:2rem 1.5rem;text-align:center;">
+          <div style="width:62px;height:62px;background:rgba(232,146,15,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;border:1px solid rgba(232,146,15,0.16);">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--c-amber-500)" stroke-width="1.75" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:#fff;margin-bottom:0.5rem;">Hızlı Teslimat</div>
+          <p style="color:rgba(255,255,255,0.52);font-size:0.85rem;line-height:1.65;">Türkiye genelinde güçlü lojistik ağımızla sipariş verdiğiniz ürün zamanında elinizde.</p>
+        </div>
+
+        <div class="feature-card" style="background:var(--c-green-900);border-radius:10px;padding:2rem 1.5rem;text-align:center;">
+          <div style="width:62px;height:62px;background:rgba(78,166,36,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;border:1px solid rgba(78,166,36,0.16);">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#9FE07A" stroke-width="1.75" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+          </div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:#fff;margin-bottom:0.5rem;">Uzman Destek</div>
+          <p style="color:rgba(255,255,255,0.52);font-size:0.85rem;line-height:1.65;">Ziraat mühendislerimiz toprak analizi ve ürün seçiminde size ücretsiz rehberlik eder.</p>
+        </div>
+
+      </div>
+
+      <!-- stats band -->
+      <div class="fade-up" style="background:var(--c-green-900);border-radius:12px;padding:3rem;position:relative;overflow:hidden;">
+        <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(78,166,36,0.1) 0%,transparent 70%);pointer-events:none;"></div>
+        <div class="stats-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;position:relative;z-index:1;">
+          <div style="text-align:center;">
+            <div class="stat-value">25+</div>
+            <div style="color:rgba(255,255,255,0.55);font-size:0.875rem;margin-top:0.5rem;font-weight:500;">Yıl Tecrübe</div>
+          </div>
+          <div style="text-align:center;border-left:1px solid rgba(255,255,255,0.1);">
+            <div class="stat-value">500+</div>
+            <div style="color:rgba(255,255,255,0.55);font-size:0.875rem;margin-top:0.5rem;font-weight:500;">Ürün Çeşidi</div>
+          </div>
+          <div style="text-align:center;border-left:1px solid rgba(255,255,255,0.1);">
+            <div class="stat-value">10K+</div>
+            <div style="color:rgba(255,255,255,0.55);font-size:0.875rem;margin-top:0.5rem;font-weight:500;">Mutlu Çiftçi</div>
+          </div>
+          <div style="text-align:center;border-left:1px solid rgba(255,255,255,0.1);">
+            <div class="stat-value">81</div>
+            <div style="color:rgba(255,255,255,0.55);font-size:0.875rem;margin-top:0.5rem;font-weight:500;">İle Teslimat</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ════════════════ PROCESS ════════════════ -->
+  <section style="padding:6rem 2rem;background:var(--c-cream-200);">
+    <div style="max-width:900px;margin:0 auto;">
+
+      <div style="text-align:center;margin-bottom:3.5rem;" class="fade-up">
+        <div style="display:flex;justify-content:center;"><div class="section-accent"></div></div>
+        <span style="color:var(--c-amber-700);font-size:0.78rem;font-weight:700;letter-spacing:0.13em;text-transform:uppercase;display:block;margin-bottom:0.75rem;">Nasıl Çalışırız?</span>
+        <h2 style="font-size:clamp(1.8rem,3vw,2.5rem);font-weight:800;color:var(--c-green-900);letter-spacing:-0.02em;">
+          4 Adımda <em>Bereket Deneyimi</em>
+        </h2>
+      </div>
+
+      <div class="step-grid fade-up" style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+
+        <div class="step-card" style="background:#fff;border-radius:10px;padding:2rem;box-shadow:0 4px 20px rgba(42,94,18,0.08),0 1px 4px rgba(42,94,18,0.05);display:flex;gap:1.25rem;align-items:flex-start;">
+          <div style="width:48px;height:48px;background:var(--c-green-900);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <span style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:900;color:var(--c-amber-300);">01</span>
+          </div>
+          <div>
+            <h3 style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--c-green-900);margin-bottom:0.5rem;">Toprak Analizi</h3>
+            <p style="color:var(--c-text-muted);font-size:0.875rem;line-height:1.72;">Uzman agronomistlerimiz arazinizde toprak örneği alarak laboratuvar analizini gerçekleştirir.</p>
+          </div>
+        </div>
+
+        <div class="step-card" style="background:#fff;border-radius:10px;padding:2rem;box-shadow:0 4px 20px rgba(42,94,18,0.08),0 1px 4px rgba(42,94,18,0.05);display:flex;gap:1.25rem;align-items:flex-start;">
+          <div style="width:48px;height:48px;background:var(--c-amber-700);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <span style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:900;color:#fff;">02</span>
+          </div>
+          <div>
+            <h3 style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--c-green-900);margin-bottom:0.5rem;">Ürün Önerisi</h3>
+            <p style="color:var(--c-text-muted);font-size:0.875rem;line-height:1.72;">Analiz sonuçları doğrultusunda bitkiye özel gübre programı ve dozaj tavsiyesi hazırlanır.</p>
+          </div>
+        </div>
+
+        <div class="step-card" style="background:#fff;border-radius:10px;padding:2rem;box-shadow:0 4px 20px rgba(42,94,18,0.08),0 1px 4px rgba(42,94,18,0.05);display:flex;gap:1.25rem;align-items:flex-start;">
+          <div style="width:48px;height:48px;background:var(--c-green-700);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <span style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:900;color:#fff;">03</span>
+          </div>
+          <div>
+            <h3 style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--c-green-900);margin-bottom:0.5rem;">Hızlı Teslimat</h3>
+            <p style="color:var(--c-text-muted);font-size:0.875rem;line-height:1.72;">Sipariş onayından sonra ürünleriniz güvenli ambalajında, planlanan zamanda teslim edilir.</p>
+          </div>
+        </div>
+
+        <div class="step-card" style="background:#fff;border-radius:10px;padding:2rem;box-shadow:0 4px 20px rgba(42,94,18,0.08),0 1px 4px rgba(42,94,18,0.05);display:flex;gap:1.25rem;align-items:flex-start;">
+          <div style="width:48px;height:48px;background:var(--c-green-900);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <span style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:900;color:var(--c-amber-300);">04</span>
+          </div>
+          <div>
+            <h3 style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--c-green-900);margin-bottom:0.5rem;">Sonuç Takibi</h3>
+            <p style="color:var(--c-text-muted);font-size:0.875rem;line-height:1.72;">Sezon boyunca agronomistlerimiz ilerlemeyi takip eder, gerekirse uygulamada revizyon önerir.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════ CONTACT ════════════════ -->
+  <section id="iletisim" style="padding:6rem 2rem;background:var(--c-green-900);position:relative;overflow:hidden;">
+    <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 30% 60%,rgba(78,166,36,0.14) 0%,transparent 55%);pointer-events:none;"></div>
+    <div style="position:absolute;top:-200px;right:-200px;width:500px;height:500px;border-radius:50%;border:1px solid rgba(255,255,255,0.04);pointer-events:none;"></div>
+
+    <div style="max-width:1200px;margin:0 auto;position:relative;z-index:2;">
+      <div class="contact-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;">
+
+        <!-- Info -->
+        <div class="fade-up">
+          <div class="section-accent"></div>
+          <span style="color:var(--c-amber-300);font-size:0.78rem;font-weight:700;letter-spacing:0.13em;text-transform:uppercase;display:block;margin-bottom:0.75rem;">İletişim</span>
+          <h2 style="font-size:clamp(1.8rem,3vw,2.5rem);font-weight:800;color:#fff;letter-spacing:-0.02em;line-height:1.2;margin-bottom:1.5rem;">
+            Gübre İhtiyacınız<br>İçin Bize Ulaşın
+          </h2>
+          <p style="color:rgba(255,255,255,0.62);line-height:1.8;margin-bottom:2.5rem;">
+            Toprak analizi, ürün tavsiyesi veya toplu sipariş için uzman ekibimizle iletişime geçin. Size en uygun gübre programını birlikte oluşturalım.
+          </p>
+
+          <div style="display:flex;flex-direction:column;gap:1.5rem;">
+
+            <div style="display:flex;align-items:flex-start;gap:1rem;">
+              <div style="width:44px;height:44px;background:rgba(232,146,15,0.12);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid rgba(232,146,15,0.2);">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="var(--c-amber-500)" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.2 11.8a19.79 19.79 0 01-3.07-8.67A2 2 0 012.11 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+              </div>
+              <div>
+                <div style="color:rgba(255,255,255,0.45);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem;">Telefon</div>
+                <a href="tel:+905001234567" style="color:#fff;text-decoration:none;font-size:1rem;font-weight:500;transition:color 0.2s;" onmouseover="this.style.color='var(--c-amber-300)'" onmouseout="this.style.color='#fff'">+90 (500) 123 45 67</a>
+              </div>
+            </div>
+
+            <div style="display:flex;align-items:flex-start;gap:1rem;">
+              <div style="width:44px;height:44px;background:rgba(232,146,15,0.12);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid rgba(232,146,15,0.2);">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="var(--c-amber-500)" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              </div>
+              <div>
+                <div style="color:rgba(255,255,255,0.45);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem;">E-posta</div>
+                <a href="mailto:info@bereketZiraat.com.tr" style="color:#fff;text-decoration:none;font-size:1rem;font-weight:500;transition:color 0.2s;" onmouseover="this.style.color='var(--c-amber-300)'" onmouseout="this.style.color='#fff'">info@bereketZiraat.com.tr</a>
+              </div>
+            </div>
+
+            <div style="display:flex;align-items:flex-start;gap:1rem;">
+              <div style="width:44px;height:44px;background:rgba(232,146,15,0.12);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid rgba(232,146,15,0.2);">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="var(--c-amber-500)" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+              <div>
+                <div style="color:rgba(255,255,255,0.45);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem;">Adres</div>
+                <div style="color:#fff;font-size:1rem;font-weight:500;line-height:1.55;">Organize Sanayi Bölgesi<br>Konya, Türkiye</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Form -->
+        <div class="fade-up" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:2.5rem;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);">
+          <h3 style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:#fff;margin-bottom:0.5rem;">Teklif Talep Formu</h3>
+          <p style="color:rgba(255,255,255,0.5);font-size:0.85rem;margin-bottom:2rem;">24 saat içinde dönüş yapıyoruz.</p>
+
+          <form style="display:flex;flex-direction:column;gap:1.25rem;" onsubmit="return false;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+              <div>
+                <label style="display:block;color:rgba(255,255,255,0.65);font-size:0.75rem;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;margin-bottom:0.45rem;">Ad Soyad</label>
+                <input type="text" placeholder="Ahmet Yılmaz" style="width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);border-radius:6px;padding:0.72rem 1rem;color:#fff;font-size:0.9rem;font-family:'Inter',sans-serif;outline:none;transition:border-color 0.2s,box-shadow 0.2s;">
+              </div>
+              <div>
+                <label style="display:block;color:rgba(255,255,255,0.65);font-size:0.75rem;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;margin-bottom:0.45rem;">Telefon</label>
+                <input type="tel" placeholder="+90 5XX XXX XX XX" style="width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);border-radius:6px;padding:0.72rem 1rem;color:#fff;font-size:0.9rem;font-family:'Inter',sans-serif;outline:none;transition:border-color 0.2s,box-shadow 0.2s;">
+              </div>
+            </div>
+            <div>
+              <label style="display:block;color:rgba(255,255,255,0.65);font-size:0.75rem;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;margin-bottom:0.45rem;">E-posta</label>
+              <input type="email" placeholder="email@ornek.com" style="width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);border-radius:6px;padding:0.72rem 1rem;color:#fff;font-size:0.9rem;font-family:'Inter',sans-serif;outline:none;transition:border-color 0.2s,box-shadow 0.2s;">
+            </div>
+            <div>
+              <label style="display:block;color:rgba(255,255,255,0.65);font-size:0.75rem;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;margin-bottom:0.45rem;">Gübre Türü</label>
+              <div style="position:relative;">
+                <select style="width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);border-radius:6px;padding:0.72rem 1rem;color:#fff;font-size:0.9rem;font-family:'Inter',sans-serif;outline:none;appearance:none;-webkit-appearance:none;cursor:pointer;transition:border-color 0.2s;">
+                  <option value="" style="background:#1A3D08;">Seçiniz...</option>
+                  <option value="azotlu" style="background:#1A3D08;">Azotlu Gübre</option>
+                  <option value="fosforlu" style="background:#1A3D08;">Fosforlu Gübre</option>
+                  <option value="potasyumlu" style="background:#1A3D08;">Potasyumlu Gübre</option>
+                  <option value="kompoze" style="background:#1A3D08;">Kompoze NPK</option>
+                  <option value="yaprak" style="background:#1A3D08;">Yaprak Gübre</option>
+                  <option value="organik" style="background:#1A3D08;">Organik Gübre</option>
+                  <option value="diger" style="background:#1A3D08;">Diğer / Bilmiyorum</option>
+                </select>
+                <svg style="position:absolute;right:1rem;top:50%;transform:translateY(-50%);pointer-events:none;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+            <div>
+              <label style="display:block;color:rgba(255,255,255,0.65);font-size:0.75rem;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;margin-bottom:0.45rem;">Mesajınız</label>
+              <textarea rows="4" placeholder="Arazi büyüklüğü, yetiştirdiğiniz ürün ve gübre ihtiyaçlarınızı belirtin..." style="width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);border-radius:6px;padding:0.72rem 1rem;color:#fff;font-size:0.9rem;font-family:'Inter',sans-serif;outline:none;resize:vertical;transition:border-color 0.2s,box-shadow 0.2s;"></textarea>
+            </div>
+            <button type="submit" class="btn-amber" style="width:100%;padding:0.9rem;font-size:0.95rem;border-radius:6px;">Teklif Talep Et &#8594;</button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════ FOOTER ════════════════ -->
+  <footer style="background:var(--c-green-950);padding:3.5rem 2rem 2rem;">
+    <div style="max-width:1200px;margin:0 auto;">
+      <div class="footer-grid" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem;">
+
+        <div>
+          <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.25rem;">
+            <img src="brand_assets/logo.png" alt="Bereket Ziraat" style="height:50px;width:50px;object-fit:contain;">
+            <div>
+              <div style="font-family:'Playfair Display',serif;font-size:1rem;font-weight:800;color:#fff;line-height:1.15;">BEREKET ZİRAAT</div>
+              <div style="font-size:0.6rem;color:rgba(255,255,255,0.38);letter-spacing:0.12em;text-transform:uppercase;">Limited Şirketi</div>
+            </div>
+          </div>
+          <p style="color:rgba(255,255,255,0.42);font-size:0.875rem;line-height:1.7;max-width:260px;">25 yılı aşkın deneyimle Türk çiftçisine güvenilir, sertifikalı gübre çözümleri sunuyoruz.</p>
+          <div style="display:flex;gap:0.65rem;margin-top:1.5rem;">
+            <a href="#" aria-label="Facebook" style="width:36px;height:36px;background:rgba(255,255,255,0.07);border-radius:6px;display:flex;align-items:center;justify-content:center;transition:background-color 0.2s;" onmouseover="this.style.backgroundColor='rgba(232,146,15,0.18)'" onmouseout="this.style.backgroundColor='rgba(255,255,255,0.07)'">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="rgba(255,255,255,0.6)"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </a>
+            <a href="#" aria-label="Instagram" style="width:36px;height:36px;background:rgba(255,255,255,0.07);border-radius:6px;display:flex;align-items:center;justify-content:center;transition:background-color 0.2s;" onmouseover="this.style.backgroundColor='rgba(232,146,15,0.18)'" onmouseout="this.style.backgroundColor='rgba(255,255,255,0.07)'">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="#" aria-label="LinkedIn" style="width:36px;height:36px;background:rgba(255,255,255,0.07);border-radius:6px;display:flex;align-items:center;justify-content:center;transition:background-color 0.2s;" onmouseover="this.style.backgroundColor='rgba(232,146,15,0.18)'" onmouseout="this.style.backgroundColor='rgba(255,255,255,0.07)'">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="rgba(255,255,255,0.6)"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <div style="color:rgba(255,255,255,0.6);font-size:0.72rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:1.25rem;">Kurumsal</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:0.7rem;">
+            <li><a href="#hakkimizda" style="color:rgba(255,255,255,0.42);text-decoration:none;font-size:0.875rem;transition:color 0.2s;" onmouseover="this.style.color='rgba(255,255,255,0.88)'" onmouseout="this.style.color='rgba(255,255,255,0.42)'">Hakkımızda</a></li>
+            <li><a href="#" style="color:rgba(255,255,255,0.42);text-decoration:none;font-size:0.875rem;transition:color 0.2s;" onmouseover="this.style.color='rgba(255,255,255,0.88)'" onmouseout="this.style.color='rgba(255,255,255,0.42)'">Kariyer</a></li>
+            <li><a href="#" style="color:rgba(255,255,255,0.42);text-decoration:none;font-size:0.875rem;transition:color 0.2s;" onmouseover="this.style.color='rgba(255,255,255,0.88)'" onmouseout="this.style.color='rgba(255,255,255,0.42)'">Haberler</a></li>
+            <li><a href="#iletisim" style="color:rgba(255,255,255,0.42);text-decoration:none;font-size:0.875rem;transition:color 0.2s;" onmouseover="this.style.color='rgba(255,255,255,0.88)'" onmouseout="this.style.color='rgba(255,255,255,0.42)'">İletişim</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div style="color:rgba(255,255,255,0.6);font-size:0.72rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:1.25rem;">Ürünler</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:0.7rem;">
+            <li><a href="#urunler" style="color:rgba(255,255,255,0.42);text-decoration:none;font-size:0.875rem;transition:color 0.2s;" onmouseover="this.style.color='rgba(255,255,255,0.88)'" onmouseout="this.style.color='rgba(255,255,255,0.42)'">Azotlu Gübreler</a></li>
+            <li><a href="#urunler" style="color:rgba(255,255,255,0.42);text-decoration:none;font-size:0.875rem;transition:color 0.2s;" onmouseover="this.style.color='rgba(255,255,255,0.88)'" onmouseout="this.style.color='rgba(255,255,255,0.42)'">Fosforlu Gübreler</a></li>
+            <li><a href="#urunler" style="color:rgba(255,255,255,0.42);text-decoration:none;font-size:0.875rem;transition:color 0.2s;" onmouseover="this.style.color='rgba(255,255,255,0.88)'" onmouseout="this.style.color='rgba(255,255,255,0.42)'">Kompoze NPK</a></li>
+            <li><a href="#urunler" style="color:rgba(255,255,255,0.42);text-decoration:none;font-size:0.875rem;transition:color 0.2s;" onmouseover="this.style.color='rgba(255,255,255,0.88)'" onmouseout="this.style.color='rgba(255,255,255,0.42)'">Organik Gübreler</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div style="color:rgba(255,255,255,0.6);font-size:0.72rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:1.25rem;">Hizmetler</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:0.7rem;">
+            <li><a href="#" style="color:rgba(255,255,255,0.42);text-decoration:none;font-size:0.875rem;transition:color 0.2s;" onmouseover="this.style.color='rgba(255,255,255,0.88)'" onmouseout="this.style.color='rgba(255,255,255,0.42)'">Toprak Analizi</a></li>
+            <li><a href="#" style="color:rgba(255,255,255,0.42);text-decoration:none;font-size:0.875rem;transition:color 0.2s;" onmouseover="this.style.color='rgba(255,255,255,0.88)'" onmouseout="this.style.color='rgba(255,255,255,0.42)'">Gübre Programı</a></li>
+            <li><a href="#" style="color:rgba(255,255,255,0.42);text-decoration:none;font-size:0.875rem;transition:color 0.2s;" onmouseover="this.style.color='rgba(255,255,255,0.88)'" onmouseout="this.style.color='rgba(255,255,255,0.42)'">Toplu Sipariş</a></li>
+            <li><a href="#" style="color:rgba(255,255,255,0.42);text-decoration:none;font-size:0.875rem;transition:color 0.2s;" onmouseover="this.style.color='rgba(255,255,255,0.88)'" onmouseout="this.style.color='rgba(255,255,255,0.42)'">Teknik Destek</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+        <div style="color:rgba(255,255,255,0.28);font-size:0.8rem;">&#169; 2025 Bereket Ziraat Limited Şirketi. Tüm hakları saklıdır.</div>
+        <div style="display:flex;gap:1.5rem;">
+          <a href="#" style="color:rgba(255,255,255,0.28);text-decoration:none;font-size:0.8rem;transition:color 0.2s;" onmouseover="this.style.color='rgba(255,255,255,0.6)'" onmouseout="this.style.color='rgba(255,255,255,0.28)'">Gizlilik Politikası</a>
+          <a href="#" style="color:rgba(255,255,255,0.28);text-decoration:none;font-size:0.8rem;transition:color 0.2s;" onmouseover="this.style.color='rgba(255,255,255,0.6)'" onmouseout="this.style.color='rgba(255,255,255,0.28)'">Kullanım Koşulları</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Nav scroll effect
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    // Scroll-reveal animations
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.fade-up').forEach(el => revealObserver.observe(el));
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const id = a.getAttribute('href');
+        if (id === '#') return;
+        const target = document.querySelector(id);
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // Form field focus styles
+    document.querySelectorAll('input, select, textarea').forEach(el => {
+      el.addEventListener('focus', () => {
+        el.style.borderColor = 'rgba(232,146,15,0.55)';
+        el.style.boxShadow = '0 0 0 3px rgba(232,146,15,0.12)';
+      });
+      el.addEventListener('blur', () => {
+        el.style.borderColor = 'rgba(255,255,255,0.14)';
+        el.style.boxShadow = 'none';
+      });
+    });
+  </script>
+</body>
+</html>
