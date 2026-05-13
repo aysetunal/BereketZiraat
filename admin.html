@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bereket Ziraat — Admin Paneli</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green-950: #0D2006;
+      --green-900: #1A3D08;
+      --green-800: #27500A;
+      --green-700: #3B6D11;
+      --green-light: #EAF3DE;
+      --amber:      #E8971A;
+      --amber-dark: #BA7517;
+      --amber-light:#F5C842;
+      --cream:      #fdf8f0;
+      --text:       #1C1108;
+      --text-muted: #4A3F2F;
+      --border:     #D8CEBA;
+      --danger:     #C0392B;
+      --danger-hover:#992d22;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── Login ── */
+    #login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(ellipse at 60% 30%, rgba(59,109,17,0.18) 0%, transparent 55%),
+                  var(--green-900);
+      padding: 2rem;
+    }
+    .login-box {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.13);
+      border-radius: 14px;
+      padding: 3rem 2.75rem;
+      width: 100%;
+      max-width: 420px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 32px 80px rgba(0,0,0,0.4);
+    }
+    .login-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 2.25rem;
+    }
+    .login-logo img { height: 52px; width: 52px; object-fit: contain; }
+    .login-logo-text .brand { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 800; color: #fff; line-height: 1.2; letter-spacing: 0.01em; }
+    .login-logo-text .sub { font-size: 0.6rem; color: rgba(255,255,255,0.4); letter-spacing: 0.14em; text-transform: uppercase; }
+
+    .login-title { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 800; color: #fff; margin-bottom: 0.4rem; }
+    .login-sub { color: rgba(255,255,255,0.45); font-size: 0.875rem; margin-bottom: 2rem; }
+
+    .field-group { display: flex; flex-direction: column; gap: 0.45rem; margin-bottom: 1.25rem; }
+    .field-label { color: rgba(255,255,255,0.6); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+    .field-input {
+      width: 100%;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 7px;
+      padding: 0.78rem 1rem;
+      color: #fff;
+      font-size: 0.9rem;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .field-input::placeholder { color: rgba(255,255,255,0.28); }
+    .field-input:focus { border-color: rgba(232,151,26,0.55); box-shadow: 0 0 0 3px rgba(232,151,26,0.12); }
+
+    #login-error { color: #FF7F7F; font-size: 0.82rem; margin-bottom: 1rem; display: none; }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+      background: var(--amber);
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      padding: 0.82rem 1.6rem;
+      font-size: 0.9rem;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      letter-spacing: 0.02em;
+      transition: background-color 0.2s, transform 0.15s, box-shadow 0.2s;
+    }
+    .btn-primary:hover { background: var(--amber-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(186,117,23,0.4); }
+    .btn-primary:active { transform: translateY(0); box-shadow: none; }
+    .btn-primary:focus-visible { outline: 3px solid var(--amber-light); outline-offset: 3px; }
+    .btn-primary:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: rgba(255,255,255,0.07);
+      color: rgba(255,255,255,0.75);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 7px;
+      padding: 0.6rem 1.1rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,0.13); color: #fff; border-color: rgba(255,255,255,0.28); }
+    .btn-secondary:focus-visible { outline: 2px solid var(--amber-light); outline-offset: 2px; }
+
+    .btn-danger {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: rgba(192,57,43,0.12);
+      color: #FF7F7F;
+      border: 1px solid rgba(192,57,43,0.25);
+      border-radius: 7px;
+      padding: 0.5rem 0.9rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background-color 0.2s, color 0.2s;
+    }
+    .btn-danger:hover { background: rgba(192,57,43,0.22); color: #FF9F9F; }
+    .btn-danger:focus-visible { outline: 2px solid #FF7F7F; outline-offset: 2px; }
+
+    /* ── App shell ── */
+    #app { display: none; min-height: 100vh; flex-direction: column; }
+    #app.visible { display: flex; }
+
+    /* ── Top bar ── */
+    .topbar {
+      background: var(--green-900);
+      padding: 0.9rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.25);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 0.8rem; }
+    .topbar-logo { height: 40px; width: 40px; object-fit: contain; }
+    .topbar-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 800; color: #fff; }
+    .topbar-badge { font-size: 0.62rem; color: rgba(255,255,255,0.4); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 1px; }
+
+    /* ── Main content ── */
+    .main-content { flex: 1; padding: 2.5rem 2rem; max-width: 1200px; margin: 0 auto; width: 100%; }
+
+    /* ── Section header ── */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.75rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .section-title { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 800; color: var(--green-900); }
+    .section-sub { color: var(--text-muted); font-size: 0.875rem; margin-top: 0.15rem; }
+
+    /* ── Product table ── */
+    .table-wrap {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(42,94,18,0.07);
+    }
+    table { width: 100%; border-collapse: collapse; }
+    thead { background: var(--green-900); }
+    thead th { color: rgba(255,255,255,0.7); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; padding: 0.9rem 1.1rem; text-align: left; white-space: nowrap; }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background-color 0.15s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--green-light); }
+    tbody td { padding: 0.9rem 1.1rem; font-size: 0.875rem; color: var(--text); vertical-align: middle; }
+
+    .table-img { width: 48px; height: 48px; border-radius: 6px; background: var(--green-light); object-fit: contain; display: block; }
+    .table-img-placeholder { width: 48px; height: 48px; border-radius: 6px; background: var(--green-light); display: flex; align-items: center; justify-content: center; color: var(--green-700); font-size: 1.2rem; }
+
+    .badge-new { display: inline-block; background: rgba(232,151,26,0.15); color: var(--amber-dark); border: 1px solid rgba(232,151,26,0.3); border-radius: 3px; font-size: 0.62rem; font-weight: 700; padding: 0.15rem 0.45rem; letter-spacing: 0.08em; text-transform: uppercase; }
+    .badge-stock { display: inline-block; border-radius: 3px; font-size: 0.62rem; font-weight: 700; padding: 0.15rem 0.45rem; letter-spacing: 0.06em; text-transform: uppercase; }
+    .badge-stock.in  { background: rgba(39,80,10,0.1); color: var(--green-800); border: 1px solid rgba(39,80,10,0.2); }
+    .badge-stock.out { background: rgba(192,57,43,0.1); color: var(--danger); border: 1px solid rgba(192,57,43,0.2); }
+
+    .actions { display: flex; gap: 0.5rem; align-items: center; }
+
+    /* ── Empty / loading states ── */
+    .state-box { padding: 3.5rem 2rem; text-align: center; }
+    .state-box .icon { font-size: 2.2rem; margin-bottom: 0.75rem; }
+    .state-box p { color: var(--text-muted); font-size: 0.9rem; }
+
+    /* ── Modal overlay ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(10,24,5,0.88);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      overflow-y: auto;
+      padding: 2rem 1rem;
+    }
+    .modal-overlay.open { display: block; }
+    .modal-box {
+      background: var(--green-900);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 14px;
+      max-width: 780px;
+      margin: 1rem auto;
+      overflow: hidden;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.5);
+    }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .modal-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 800; color: #fff; }
+    .modal-close {
+      width: 34px; height: 34px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 50%;
+      color: rgba(255,255,255,0.7);
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background-color 0.2s, transform 0.15s;
+      font-family: 'Inter', sans-serif;
+    }
+    .modal-close:hover { background: rgba(255,255,255,0.15); transform: scale(1.08); }
+    .modal-close:focus-visible { outline: 2px solid var(--amber-light); outline-offset: 2px; }
+    .modal-body { padding: 2rem; }
+    .modal-footer { display: flex; gap: 0.75rem; justify-content: flex-end; padding: 1.25rem 2rem; border-top: 1px solid rgba(255,255,255,0.1); }
+
+    /* ── Form ── */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+    .form-full { grid-column: 1 / -1; }
+
+    .form-field { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-label { color: rgba(255,255,255,0.55); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; }
+    .form-label span { color: rgba(255,69,69,0.75); margin-left: 2px; }
+
+    .form-input, .form-select, .form-textarea {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 7px;
+      padding: 0.72rem 1rem;
+      color: #fff;
+      font-size: 0.875rem;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      width: 100%;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-input::placeholder, .form-textarea::placeholder { color: rgba(255,255,255,0.22); }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: rgba(232,151,26,0.55);
+      box-shadow: 0 0 0 3px rgba(232,151,26,0.12);
+    }
+    .form-select {
+      appearance: none; -webkit-appearance: none; cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.4)' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.9rem center;
+      padding-right: 2.5rem;
+    }
+    .form-select option { background: var(--green-900); }
+    .form-textarea { resize: vertical; min-height: 90px; }
+
+    /* checkbox row */
+    .check-row { display: flex; align-items: center; gap: 0.65rem; cursor: pointer; }
+    .check-row input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--amber); cursor: pointer; }
+    .check-label { color: rgba(255,255,255,0.72); font-size: 0.875rem; font-weight: 500; }
+
+    /* ── Specs builder ── */
+    .specs-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.65rem; }
+    .specs-label { color: rgba(255,255,255,0.55); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; }
+    .spec-row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem; }
+    .spec-remove {
+      width: 30px; height: 30px;
+      background: rgba(192,57,43,0.1);
+      border: 1px solid rgba(192,57,43,0.22);
+      border-radius: 6px;
+      color: #FF7F7F;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background-color 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .spec-remove:hover { background: rgba(192,57,43,0.22); }
+
+    /* ── Image upload ── */
+    .upload-zone {
+      border: 2px dashed rgba(255,255,255,0.18);
+      border-radius: 10px;
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background-color 0.2s;
+      position: relative;
+    }
+    .upload-zone:hover { border-color: rgba(232,151,26,0.45); background: rgba(232,151,26,0.04); }
+    .upload-zone.drag-over { border-color: var(--amber); background: rgba(232,151,26,0.08); }
+    .upload-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+    .upload-preview { width: 100%; max-height: 160px; object-fit: contain; background: var(--green-light); border-radius: 8px; margin-top: 0.75rem; display: none; }
+    .upload-hint { color: rgba(255,255,255,0.4); font-size: 0.8rem; margin-top: 0.35rem; }
+    .upload-filename { color: var(--amber-light); font-size: 0.82rem; margin-top: 0.35rem; font-weight: 500; display: none; }
+
+    /* ── Toast ── */
+    #toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--green-900);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 10px;
+      padding: 1rem 1.5rem;
+      color: #fff;
+      font-size: 0.875rem;
+      font-weight: 500;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+      z-index: 300;
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      max-width: 340px;
+    }
+    #toast.show { transform: translateY(0); opacity: 1; }
+    #toast.error { border-color: rgba(192,57,43,0.4); }
+    .toast-dot { width: 8px; height: 8px; border-radius: 50%; background: #4CAF50; flex-shrink: 0; }
+    #toast.error .toast-dot { background: var(--danger); }
+
+    /* ── Confirm dialog ── */
+    #confirm-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      background: rgba(10,24,5,0.85);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      align-items: center;
+      justify-content: center;
+    }
+    #confirm-overlay.open { display: flex; }
+    .confirm-box {
+      background: var(--green-900);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 2rem 2.25rem;
+      max-width: 380px;
+      width: 90%;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.45);
+      text-align: center;
+    }
+    .confirm-icon { font-size: 2.2rem; margin-bottom: 0.75rem; }
+    .confirm-title { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem; }
+    .confirm-msg { color: rgba(255,255,255,0.55); font-size: 0.875rem; margin-bottom: 1.75rem; line-height: 1.6; }
+    .confirm-actions { display: flex; gap: 0.75rem; justify-content: center; }
+
+    /* ── Spinner ── */
+    .spin { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.2); border-top-color: #fff; border-radius: 50%; animation: spin 0.65s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .spec-row { grid-template-columns: 1fr auto; }
+      .spec-row .form-input:nth-child(2) { grid-column: 1; }
+      .main-content { padding: 1.5rem 1rem; }
+      thead th:nth-child(3), thead th:nth-child(4), tbody td:nth-child(3), tbody td:nth-child(4) { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ════ LOGIN SCREEN ════ -->
+  <div id="login-screen">
+    <div class="login-box">
+      <div class="login-logo">
+        <img src="brand_assets/logo.png" alt="Bereket Ziraat">
+        <div class="login-logo-text">
+          <div class="brand">BEREKET ZİRAAT</div>
+          <div class="sub">Admin Paneli</div>
+        </div>
+      </div>
+      <h2 class="login-title">Giriş Yap</h2>
+      <p class="login-sub">Yönetim paneline erişmek için giriş yapın.</p>
+      <p id="login-error"></p>
+      <form id="login-form">
+        <div class="field-group">
+          <label class="field-label" for="username">Kullanıcı Adı</label>
+          <input class="field-input" id="username" name="username" type="text" placeholder="admin" autocomplete="username" required>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="password">Şifre</label>
+          <input class="field-input" id="password" name="password" type="password" placeholder="••••••••" autocomplete="current-password" required>
+        </div>
+        <button type="submit" class="btn-primary" id="login-btn" style="width:100%;margin-top:0.5rem;">
+          Giriş Yap
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ════ APP SHELL ════ -->
+  <div id="app">
+    <!-- Top bar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <img src="brand_assets/logo.png" alt="Bereket Ziraat" class="topbar-logo">
+        <div>
+          <div class="topbar-title">Bereket Ziraat</div>
+          <div class="topbar-badge">Admin Paneli</div>
+        </div>
+      </div>
+      <button class="btn-secondary" id="logout-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+        Çıkış Yap
+      </button>
+    </header>
+
+    <!-- Main -->
+    <main class="main-content">
+      <div class="section-header">
+        <div>
+          <h1 class="section-title">Ürün Yönetimi</h1>
+          <p class="section-sub" id="product-count">Yükleniyor...</p>
+        </div>
+        <button class="btn-primary" id="add-product-btn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Yeni Ürün Ekle
+        </button>
+      </div>
+
+      <div class="table-wrap">
+        <table id="products-table">
+          <thead>
+            <tr>
+              <th style="width:64px;">Görsel</th>
+              <th>Ürün Adı</th>
+              <th>Kategori</th>
+              <th>Marka</th>
+              <th style="width:80px;">Durum</th>
+              <th style="width:80px;">Stok</th>
+              <th style="width:130px;text-align:right;">İşlemler</th>
+            </tr>
+          </thead>
+          <tbody id="products-body">
+            <tr>
+              <td colspan="7">
+                <div class="state-box">
+                  <div class="icon">&#9719;</div>
+                  <p>Ürünler yükleniyor...</p>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <!-- ════ PRODUCT FORM MODAL ════ -->
+  <div id="form-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="form-modal-title">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2 class="modal-title" id="form-modal-title">Yeni Ürün Ekle</h2>
+        <button class="modal-close" id="form-modal-close" aria-label="Kapat">&#10005;</button>
+      </div>
+      <div class="modal-body">
+        <form id="product-form">
+          <input type="hidden" id="edit-id">
+          <div class="form-grid">
+
+            <!-- Name -->
+            <div class="form-field">
+              <label class="form-label" for="f-name">Ürün Adı <span>*</span></label>
+              <input class="form-input" id="f-name" type="text" placeholder="örn. Calibre Ca++B" required>
+            </div>
+
+            <!-- Brand -->
+            <div class="form-field">
+              <label class="form-label" for="f-brand">Marka <span>*</span></label>
+              <input class="form-input" id="f-brand" type="text" placeholder="örn. Tradecorp" required>
+            </div>
+
+            <!-- Category -->
+            <div class="form-field">
+              <label class="form-label" for="f-category">Kategori <span>*</span></label>
+              <select class="form-select" id="f-category" required>
+                <option value="">Seçiniz...</option>
+                <option value="Kalsiyum &amp; Bor">Kalsiyum &amp; Bor</option>
+                <option value="NP Gübre">NP Gübre</option>
+                <option value="Bakırlı Gübre">Bakırlı Gübre</option>
+                <option value="Organomineral">Organomineral</option>
+                <option value="Mikro Element">Mikro Element</option>
+                <option value="Diğer">Diğer</option>
+              </select>
+            </div>
+
+            <!-- Dose -->
+            <div class="form-field">
+              <label class="form-label" for="f-dose">Dozaj</label>
+              <input class="form-input" id="f-dose" type="text" placeholder="örn. 2-5 L/da">
+            </div>
+
+            <!-- Packaging -->
+            <div class="form-field">
+              <label class="form-label" for="f-packaging">Ambalaj</label>
+              <input class="form-input" id="f-packaging" type="text" placeholder="örn. 1 L, 5 L, 20 L">
+            </div>
+
+            <!-- Short desc -->
+            <div class="form-field form-full">
+              <label class="form-label" for="f-shortdesc">Kısa Açıklama</label>
+              <input class="form-input" id="f-shortdesc" type="text" placeholder="Ürün kartında görünecek kısa açıklama">
+            </div>
+
+            <!-- Long desc -->
+            <div class="form-field form-full">
+              <label class="form-label" for="f-longdesc">Uzun Açıklama</label>
+              <textarea class="form-textarea" id="f-longdesc" rows="4" placeholder="Modalda görünecek detaylı ürün açıklaması"></textarea>
+            </div>
+
+            <!-- Specs -->
+            <div class="form-field form-full">
+              <div class="specs-header">
+                <span class="specs-label">Garanti İçerik (Etiket/Değer)</span>
+                <button type="button" class="btn-secondary" id="add-spec-btn" style="padding:0.4rem 0.85rem;font-size:0.75rem;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  Satır Ekle
+                </button>
+              </div>
+              <div id="specs-container"></div>
+            </div>
+
+            <!-- Image upload -->
+            <div class="form-field form-full">
+              <label class="form-label">Ürün Görseli</label>
+              <div class="upload-zone" id="upload-zone">
+                <input type="file" id="image-file" accept="image/jpeg,image/png,image/webp">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" style="margin:0 auto 0.5rem;display:block;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <div style="color:rgba(255,255,255,0.55);font-size:0.85rem;font-weight:500;">Görsel seçmek için tıklayın</div>
+                <div class="upload-hint">JPG, PNG, WEBP — maks. 5 MB</div>
+                <div class="upload-filename" id="upload-filename"></div>
+              </div>
+              <img class="upload-preview" id="upload-preview" alt="Önizleme">
+              <div style="margin-top:0.65rem;">
+                <label class="form-label" style="margin-bottom:0.35rem;display:block;">Mevcut görsel dosya adı (opsiyonel)</label>
+                <input class="form-input" id="f-image" type="text" placeholder="örn. calibre.jpg (yeni yükleme varsa otomatik dolar)">
+              </div>
+            </div>
+
+            <!-- Checkboxes -->
+            <div class="form-field" style="justify-content:center;">
+              <label class="check-row">
+                <input type="checkbox" id="f-isnew">
+                <span class="check-label">Yeni Ürün (YENİ rozeti)</span>
+              </label>
+            </div>
+            <div class="form-field" style="justify-content:center;">
+              <label class="check-row">
+                <input type="checkbox" id="f-instock" checked>
+                <span class="check-label">Stokta Var</span>
+              </label>
+            </div>
+
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary" id="form-cancel-btn">İptal</button>
+        <button type="button" class="btn-primary" id="form-save-btn">
+          <span id="save-label">Kaydet</span>
+          <span id="save-spin" class="spin" style="display:none;"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ CONFIRM DIALOG ════ -->
+  <div id="confirm-overlay" role="dialog" aria-modal="true">
+    <div class="confirm-box">
+      <div class="confirm-icon">&#128465;</div>
+      <h3 class="confirm-title">Ürünü Sil</h3>
+      <p class="confirm-msg" id="confirm-msg">Bu ürünü silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.</p>
+      <div class="confirm-actions">
+        <button class="btn-secondary" id="confirm-cancel">Vazgeç</button>
+        <button class="btn-danger" id="confirm-ok" style="padding:0.6rem 1.2rem;font-size:0.85rem;">Evet, Sil</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ TOAST ════ -->
+  <div id="toast" role="status" aria-live="polite">
+    <span class="toast-dot"></span>
+    <span id="toast-msg"></span>
+  </div>
+
+  <script>
+  (function () {
+    'use strict';
+
+    var API   = 'http://localhost:3001/api';
+    var TOKEN_KEY = 'bz_admin_token';
+
+    // ── Helpers ─────────────────────────────────────────────────────
+    function getToken() { return localStorage.getItem(TOKEN_KEY) || ''; }
+    function setToken(t) { localStorage.setItem(TOKEN_KEY, t); }
+    function clearToken() { localStorage.removeItem(TOKEN_KEY); }
+
+    function authHeaders(extra) {
+      var h = Object.assign({ 'Authorization': 'Bearer ' + getToken() }, extra || {});
+      return h;
+    }
+
+    function apiFetch(url, opts) {
+      return fetch(url, opts).then(function (res) {
+        if (!res.ok) return res.json().then(function (d) { throw new Error(d.message || ('HTTP ' + res.status)); });
+        return res.json();
+      });
+    }
+
+    var toastTimer;
+    function toast(msg, isError) {
+      var el = document.getElementById('toast');
+      document.getElementById('toast-msg').textContent = msg;
+      el.classList.toggle('error', !!isError);
+      el.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function () { el.classList.remove('show'); }, 3200);
+    }
+
+    // ── Login ────────────────────────────────────────────────────────
+    var loginScreen = document.getElementById('login-screen');
+    var app         = document.getElementById('app');
+    var loginForm   = document.getElementById('login-form');
+    var loginBtn    = document.getElementById('login-btn');
+    var loginError  = document.getElementById('login-error');
+
+    function showApp() {
+      loginScreen.style.display = 'none';
+      app.classList.add('visible');
+      loadProducts();
+    }
+
+    function showLogin() {
+      clearToken();
+      app.classList.remove('visible');
+      loginScreen.style.display = '';
+    }
+
+    loginForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      loginError.style.display = 'none';
+      loginBtn.disabled = true;
+      loginBtn.innerHTML = '<span class="spin"></span>';
+      var user = document.getElementById('username').value.trim();
+      var pass = document.getElementById('password').value;
+      fetch(API + '/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: user, password: pass }),
+      })
+        .then(function (res) { return res.json().then(function (d) { return { ok: res.ok, d: d }; }); })
+        .then(function (r) {
+          if (r.ok && r.d.token) {
+            setToken(r.d.token);
+            showApp();
+          } else {
+            throw new Error(r.d.message || 'Giriş başarısız');
+          }
+        })
+        .catch(function (err) {
+          loginError.textContent = err.message;
+          loginError.style.display = 'block';
+          loginBtn.disabled = false;
+          loginBtn.innerHTML = 'Giriş Yap';
+        });
+    });
+
+    document.getElementById('logout-btn').addEventListener('click', showLogin);
+
+    // auto-login if token exists
+    if (getToken()) showApp();
+
+    // ── Products list ─────────────────────────────────────────────────
+    var allProducts = [];
+
+    function loadProducts() {
+      var tbody = document.getElementById('products-body');
+      tbody.innerHTML = '<tr><td colspan="7"><div class="state-box"><div class="icon">&#9719;</div><p>Ürünler yükleniyor...</p></div></td></tr>';
+      fetch(API + '/products', { headers: authHeaders() })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          allProducts = data;
+          renderTable(data);
+        })
+        .catch(function () {
+          tbody.innerHTML = '<tr><td colspan="7"><div class="state-box"><div class="icon">&#9888;</div><p>Ürünler yüklenemedi. Sunucu çalışıyor mu?</p></div></td></tr>';
+        });
+    }
+
+    function renderTable(products) {
+      var tbody = document.getElementById('products-body');
+      document.getElementById('product-count').textContent = products.length + ' ürün bulundu';
+      if (!products.length) {
+        tbody.innerHTML = '<tr><td colspan="7"><div class="state-box"><div class="icon">&#128230;</div><p>Henüz ürün eklenmemiş.</p></div></td></tr>';
+        return;
+      }
+      tbody.innerHTML = products.map(function (p) {
+        var imgSrc = p.image ? 'brand_assets/images/' + p.image : '';
+        var imgEl = imgSrc
+          ? '<img class="table-img" src="' + imgSrc + '" alt="' + esc(p.name) + '" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">'
+            + '<div class="table-img-placeholder" style="display:none;">&#127807;</div>'
+          : '<div class="table-img-placeholder">&#127807;</div>';
+        return '<tr>'
+          + '<td>' + imgEl + '</td>'
+          + '<td style="font-weight:600;">' + esc(p.name) + (p.isNewProduct ? ' <span class="badge-new">YENİ</span>' : '') + '</td>'
+          + '<td>' + esc(p.category) + '</td>'
+          + '<td style="color:var(--text-muted);">' + esc(p.brand) + '</td>'
+          + '<td>' + (p.isNewProduct ? '<span class="badge-new">YENİ</span>' : '<span style="color:var(--text-muted);font-size:0.75rem;">—</span>') + '</td>'
+          + '<td><span class="badge-stock ' + (p.inStock ? 'in' : 'out') + '">' + (p.inStock ? 'Var' : 'Yok') + '</span></td>'
+          + '<td><div class="actions" style="justify-content:flex-end;">'
+          + '<button class="btn-secondary edit-btn" data-id="' + p._id + '" style="padding:0.45rem 0.75rem;font-size:0.75rem;">'
+          + '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>'
+          + 'Düzenle</button>'
+          + '<button class="btn-danger delete-btn" data-id="' + p._id + '" data-name="' + esc(p.name) + '">'
+          + '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>'
+          + 'Sil</button>'
+          + '</div></td>'
+          + '</tr>';
+      }).join('');
+
+      tbody.querySelectorAll('.edit-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var p = allProducts.find(function (x) { return x._id === btn.dataset.id; });
+          if (p) openForm(p);
+        });
+      });
+      tbody.querySelectorAll('.delete-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          confirmDelete(btn.dataset.id, btn.dataset.name);
+        });
+      });
+    }
+
+    function esc(str) {
+      return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    // ── Delete confirm ────────────────────────────────────────────────
+    var confirmOverlay = document.getElementById('confirm-overlay');
+    var pendingDeleteId = null;
+
+    function confirmDelete(id, name) {
+      pendingDeleteId = id;
+      document.getElementById('confirm-msg').textContent = '"' + name + '" ürününü silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.';
+      confirmOverlay.classList.add('open');
+    }
+
+    document.getElementById('confirm-cancel').addEventListener('click', function () {
+      confirmOverlay.classList.remove('open');
+      pendingDeleteId = null;
+    });
+
+    document.getElementById('confirm-ok').addEventListener('click', function () {
+      if (!pendingDeleteId) return;
+      var id = pendingDeleteId;
+      confirmOverlay.classList.remove('open');
+      pendingDeleteId = null;
+      apiFetch(API + '/admin/products/' + id, {
+        method: 'DELETE',
+        headers: authHeaders(),
+      })
+        .then(function () {
+          toast('Ürün başarıyla silindi.');
+          loadProducts();
+        })
+        .catch(function (err) {
+          toast(err.message || 'Silme işlemi başarısız.', true);
+        });
+    });
+
+    // ── Form modal ───────────────────────────────────────────────────
+    var formModal  = document.getElementById('form-modal');
+    var formTitle  = document.getElementById('form-modal-title');
+    var editIdEl   = document.getElementById('edit-id');
+    var uploadedFilename = '';
+
+    function openForm(product) {
+      uploadedFilename = '';
+      document.getElementById('upload-preview').style.display = 'none';
+      document.getElementById('upload-filename').style.display = 'none';
+      document.getElementById('image-file').value = '';
+      clearSpecs();
+
+      if (product) {
+        formTitle.textContent = 'Ürünü Düzenle';
+        editIdEl.value = product._id;
+        document.getElementById('f-name').value      = product.name || '';
+        document.getElementById('f-brand').value     = product.brand || '';
+        document.getElementById('f-category').value  = product.category || '';
+        document.getElementById('f-dose').value      = product.dose || '';
+        document.getElementById('f-packaging').value = product.packaging || '';
+        document.getElementById('f-shortdesc').value = product.shortDesc || '';
+        document.getElementById('f-longdesc').value  = product.longDesc || '';
+        document.getElementById('f-image').value     = product.image || '';
+        document.getElementById('f-isnew').checked   = !!product.isNewProduct;
+        document.getElementById('f-instock').checked = product.inStock !== false;
+        (product.specs || []).forEach(function (s) { addSpecRow(s.label, s.value); });
+      } else {
+        formTitle.textContent = 'Yeni Ürün Ekle';
+        editIdEl.value = '';
+        document.getElementById('product-form').reset();
+        document.getElementById('f-instock').checked = true;
+      }
+
+      formModal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      document.getElementById('f-name').focus();
+    }
+
+    function closeForm() {
+      formModal.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('add-product-btn').addEventListener('click', function () { openForm(null); });
+    document.getElementById('form-modal-close').addEventListener('click', closeForm);
+    document.getElementById('form-cancel-btn').addEventListener('click', closeForm);
+    formModal.addEventListener('click', function (e) { if (e.target === formModal) closeForm(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { closeForm(); confirmOverlay.classList.remove('open'); } });
+
+    // ── Specs rows ───────────────────────────────────────────────────
+    var specsContainer = document.getElementById('specs-container');
+
+    function addSpecRow(label, value) {
+      var row = document.createElement('div');
+      row.className = 'spec-row';
+      var lInput = document.createElement('input');
+      lInput.className = 'form-input';
+      lInput.type = 'text';
+      lInput.placeholder = 'örn. Kalsiyum (CaO)';
+      lInput.value = label || '';
+      var vInput = document.createElement('input');
+      vInput.className = 'form-input';
+      vInput.type = 'text';
+      vInput.placeholder = 'örn. %15';
+      vInput.value = value || '';
+      var removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.className = 'spec-remove';
+      removeBtn.innerHTML = '&#215;';
+      removeBtn.addEventListener('click', function () { specsContainer.removeChild(row); });
+      row.appendChild(lInput);
+      row.appendChild(vInput);
+      row.appendChild(removeBtn);
+      specsContainer.appendChild(row);
+    }
+
+    function clearSpecs() { specsContainer.innerHTML = ''; }
+
+    function getSpecs() {
+      var rows = specsContainer.querySelectorAll('.spec-row');
+      var specs = [];
+      rows.forEach(function (row) {
+        var inputs = row.querySelectorAll('input');
+        var l = inputs[0].value.trim();
+        var v = inputs[1].value.trim();
+        if (l || v) specs.push({ label: l, value: v });
+      });
+      return specs;
+    }
+
+    document.getElementById('add-spec-btn').addEventListener('click', function () { addSpecRow('', ''); });
+
+    // ── Image upload ─────────────────────────────────────────────────
+    var imageFile    = document.getElementById('image-file');
+    var uploadZone   = document.getElementById('upload-zone');
+    var preview      = document.getElementById('upload-preview');
+    var filenameLbl  = document.getElementById('upload-filename');
+
+    imageFile.addEventListener('change', function () {
+      var file = imageFile.files[0];
+      if (!file) return;
+      filenameLbl.textContent = file.name;
+      filenameLbl.style.display = 'block';
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        preview.src = e.target.result;
+        preview.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    });
+
+    uploadZone.addEventListener('dragover', function (e) { e.preventDefault(); uploadZone.classList.add('drag-over'); });
+    uploadZone.addEventListener('dragleave', function () { uploadZone.classList.remove('drag-over'); });
+    uploadZone.addEventListener('drop', function (e) {
+      e.preventDefault();
+      uploadZone.classList.remove('drag-over');
+      var file = e.dataTransfer.files[0];
+      if (file && imageFile) {
+        var dt = new DataTransfer();
+        dt.items.add(file);
+        imageFile.files = dt.files;
+        imageFile.dispatchEvent(new Event('change'));
+      }
+    });
+
+    async function uploadImageIfNeeded() {
+      var file = imageFile.files[0];
+      if (!file) return document.getElementById('f-image').value || '';
+      var fd = new FormData();
+      fd.append('image', file);
+      var res = await fetch(API + '/admin/upload', {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + getToken() },
+        body: fd,
+      });
+      if (!res.ok) { var d = await res.json(); throw new Error(d.message || 'Görsel yüklenemedi'); }
+      var d = await res.json();
+      return d.filename;
+    }
+
+    // ── Save product ─────────────────────────────────────────────────
+    document.getElementById('form-save-btn').addEventListener('click', async function () {
+      var name     = document.getElementById('f-name').value.trim();
+      var brand    = document.getElementById('f-brand').value.trim();
+      var category = document.getElementById('f-category').value;
+      if (!name || !brand || !category) {
+        toast('Lütfen zorunlu alanları doldurun (Ürün Adı, Marka, Kategori).', true);
+        return;
+      }
+
+      var saveBtn  = document.getElementById('form-save-btn');
+      var saveLabel= document.getElementById('save-label');
+      var saveSpin = document.getElementById('save-spin');
+      saveBtn.disabled = true;
+      saveLabel.textContent = 'Kaydediliyor...';
+      saveSpin.style.display = 'inline-block';
+
+      try {
+        var imageName = await uploadImageIfNeeded();
+        var payload = {
+          name:        name,
+          brand:       brand,
+          category:    category,
+          dose:        document.getElementById('f-dose').value.trim(),
+          packaging:   document.getElementById('f-packaging').value.trim(),
+          shortDesc:   document.getElementById('f-shortdesc').value.trim(),
+          longDesc:    document.getElementById('f-longdesc').value.trim(),
+          image:       imageName,
+          isNewProduct:document.getElementById('f-isnew').checked,
+          inStock:     document.getElementById('f-instock').checked,
+          specs:       getSpecs(),
+        };
+
+        var id = editIdEl.value;
+        if (id) {
+          await apiFetch(API + '/admin/products/' + id, {
+            method: 'PUT',
+            headers: authHeaders({ 'Content-Type': 'application/json' }),
+            body: JSON.stringify(payload),
+          });
+          toast('Ürün başarıyla güncellendi.');
+        } else {
+          await apiFetch(API + '/admin/products', {
+            method: 'POST',
+            headers: authHeaders({ 'Content-Type': 'application/json' }),
+            body: JSON.stringify(payload),
+          });
+          toast('Yeni ürün başarıyla eklendi.');
+        }
+        closeForm();
+        loadProducts();
+      } catch (err) {
+        toast(err.message || 'İşlem başarısız.', true);
+      } finally {
+        saveBtn.disabled = false;
+        saveLabel.textContent = 'Kaydet';
+        saveSpin.style.display = 'none';
+      }
+    });
+  })();
+  </script>
+</body>
+</html>

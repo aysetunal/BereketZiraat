@@ -179,6 +179,74 @@
       box-shadow: 0 12px 32px rgba(42,94,18,0.15), 0 4px 12px rgba(42,94,18,0.08);
     }
 
+    /* ── Filter buttons ── */
+    .filter-btn {
+      padding: 0.45rem 1.1rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.22);
+      color: rgba(255,255,255,0.68);
+      background: transparent;
+      font-family: 'Inter', sans-serif;
+      transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+    }
+    .filter-btn:hover { border-color: rgba(255,255,255,0.55); color: #fff; transform: translateY(-1px); }
+    .filter-btn.active { background: var(--c-amber-500); border-color: var(--c-amber-500); color: #fff; }
+    .filter-btn:focus-visible { outline: 2px solid var(--c-amber-300); outline-offset: 2px; }
+
+    /* ── Loading spinner ── */
+    .spinner {
+      width: 36px; height: 36px;
+      border: 3px solid rgba(255,255,255,0.1);
+      border-top-color: var(--c-amber-500);
+      border-radius: 50%;
+      margin: 0 auto;
+      animation: spin 0.75s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Product modal ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(10,24,5,0.9);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      overflow-y: auto;
+      padding: 2rem 1rem;
+    }
+    .modal-overlay.open { display: block; }
+    .modal-box {
+      max-width: 860px;
+      margin: 2rem auto;
+      background: var(--c-green-900);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.5);
+    }
+    .modal-close-btn {
+      position: absolute;
+      top: 1.25rem; right: 1.25rem;
+      width: 36px; height: 36px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 50%;
+      color: #fff;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background-color 0.2s ease, transform 0.15s ease;
+      font-family: 'Inter', sans-serif;
+    }
+    .modal-close-btn:hover { background: rgba(255,255,255,0.18); transform: scale(1.08); }
+    .modal-close-btn:focus-visible { outline: 2px solid var(--c-amber-300); outline-offset: 2px; }
+
     /* ── Responsive ── */
     @media (max-width: 900px) {
       .hero-grid { grid-template-columns: 1fr !important; }
@@ -425,123 +493,11 @@
         </p>
       </div>
 
-      <div class="product-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;">
+      <!-- Category filter bar -->
+      <div id="filter-bar" style="display:flex;gap:0.65rem;flex-wrap:wrap;justify-content:center;margin-bottom:2.5rem;"></div>
 
-        <!-- Card: Azotlu -->
-        <div class="product-card fade-up" tabindex="0" style="background:rgba(255,255,255,0.055);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:2rem;cursor:pointer;backdrop-filter:blur(4px);">
-          <div style="width:54px;height:54px;background:rgba(232,146,15,0.14);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;border:1px solid rgba(232,146,15,0.22);">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--c-amber-500)" stroke-width="2" stroke-linecap="round"><path d="M12 2C8.5 2 5 5.1 5 9c0 5 7 13 7 13s7-8 7-13c0-3.9-3.5-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
-          </div>
-          <span class="cat-tag" style="background:rgba(232,146,15,0.14);color:var(--c-amber-300);border:1px solid rgba(232,146,15,0.22);">N — Azot</span>
-          <h3 style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:#fff;margin:0.75rem 0;">Azotlu Gübreler</h3>
-          <p style="color:rgba(255,255,255,0.52);font-size:0.875rem;line-height:1.72;margin-bottom:1.25rem;">Üre, Amonyum Nitrat, CAN ve daha fazlası. Bitkisel büyümeyi destekleyen yüksek etkinlikli azot formülasyonları.</p>
-          <div style="display:flex;gap:0.45rem;flex-wrap:wrap;">
-            <span style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);font-size:0.68rem;padding:0.18rem 0.55rem;border-radius:2px;">Üre %46</span>
-            <span style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);font-size:0.68rem;padding:0.18rem 0.55rem;border-radius:2px;">AN %26</span>
-            <span style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);font-size:0.68rem;padding:0.18rem 0.55rem;border-radius:2px;">CAN %27</span>
-          </div>
-          <div style="margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;">
-            <span style="color:var(--c-amber-300);font-size:0.8rem;font-weight:600;letter-spacing:0.04em;">Detayları Gör</span>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--c-amber-300)" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </div>
-        </div>
-
-        <!-- Card: Fosforlu -->
-        <div class="product-card fade-up" tabindex="0" style="background:rgba(255,255,255,0.055);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:2rem;cursor:pointer;backdrop-filter:blur(4px);">
-          <div style="width:54px;height:54px;background:rgba(78,166,36,0.14);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;border:1px solid rgba(78,166,36,0.22);">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#7DD655" stroke-width="2" stroke-linecap="round"><path d="M12 22V12M12 12C12 7 7 4 3 5.5M12 12C12 7 17 4 21 5.5M12 12C12 17 7 20 3 18.5M12 12C12 17 17 20 21 18.5"/></svg>
-          </div>
-          <span class="cat-tag" style="background:rgba(78,166,36,0.12);color:#9FE07A;border:1px solid rgba(78,166,36,0.22);">P — Fosfor</span>
-          <h3 style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:#fff;margin:0.75rem 0;">Fosforlu Gübreler</h3>
-          <p style="color:rgba(255,255,255,0.52);font-size:0.875rem;line-height:1.72;margin-bottom:1.25rem;">DAP, MAP ve Triple Süper Fosfat ile kök gelişimini güçlendirin. Erken dönem bitki beslenmesi için vazgeçilmez formülasyonlar.</p>
-          <div style="display:flex;gap:0.45rem;flex-wrap:wrap;">
-            <span style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);font-size:0.68rem;padding:0.18rem 0.55rem;border-radius:2px;">DAP</span>
-            <span style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);font-size:0.68rem;padding:0.18rem 0.55rem;border-radius:2px;">MAP</span>
-            <span style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);font-size:0.68rem;padding:0.18rem 0.55rem;border-radius:2px;">TSP</span>
-          </div>
-          <div style="margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;">
-            <span style="color:var(--c-amber-300);font-size:0.8rem;font-weight:600;letter-spacing:0.04em;">Detayları Gör</span>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--c-amber-300)" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </div>
-        </div>
-
-        <!-- Card: Potasyumlu -->
-        <div class="product-card fade-up" tabindex="0" style="background:rgba(255,255,255,0.055);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:2rem;cursor:pointer;backdrop-filter:blur(4px);">
-          <div style="width:54px;height:54px;background:rgba(201,122,8,0.14);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;border:1px solid rgba(201,122,8,0.22);">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--c-amber-700)" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
-          </div>
-          <span class="cat-tag" style="background:rgba(201,122,8,0.12);color:#E8B96F;border:1px solid rgba(201,122,8,0.22);">K — Potasyum</span>
-          <h3 style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:#fff;margin:0.75rem 0;">Potasyumlu Gübreler</h3>
-          <p style="color:rgba(255,255,255,0.52);font-size:0.875rem;line-height:1.72;margin-bottom:1.25rem;">Potasyum Klorür ve Potasyum Sülfat ile meyve kalitesini ve hastalık direncini artırın. Sürdürülebilir tarım için ideal.</p>
-          <div style="display:flex;gap:0.45rem;flex-wrap:wrap;">
-            <span style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);font-size:0.68rem;padding:0.18rem 0.55rem;border-radius:2px;">MOP</span>
-            <span style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);font-size:0.68rem;padding:0.18rem 0.55rem;border-radius:2px;">SOP</span>
-            <span style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);font-size:0.68rem;padding:0.18rem 0.55rem;border-radius:2px;">KNO₃</span>
-          </div>
-          <div style="margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;">
-            <span style="color:var(--c-amber-300);font-size:0.8rem;font-weight:600;letter-spacing:0.04em;">Detayları Gör</span>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--c-amber-300)" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </div>
-        </div>
-
-        <!-- Card: Kompoze NPK -->
-        <div class="product-card fade-up" tabindex="0" style="background:rgba(255,255,255,0.055);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:2rem;cursor:pointer;backdrop-filter:blur(4px);">
-          <div style="width:54px;height:54px;background:rgba(232,146,15,0.1);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;border:1px solid rgba(232,146,15,0.18);">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--c-amber-500)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="8"/><line x1="12" y1="16" x2="12" y2="22"/><line x1="2" y1="12" x2="8" y2="12"/><line x1="16" y1="12" x2="22" y2="12"/></svg>
-          </div>
-          <span class="cat-tag" style="background:rgba(232,146,15,0.12);color:var(--c-amber-300);border:1px solid rgba(232,146,15,0.2);">NPK Kompoze</span>
-          <h3 style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:#fff;margin:0.75rem 0;">Kompoze Gübreler</h3>
-          <p style="color:rgba(255,255,255,0.52);font-size:0.875rem;line-height:1.72;margin-bottom:1.25rem;">Tek üründe azot, fosfor ve potasyum dengesi. 15-15-15, 20-20-0, 12-24-12 ve özel NPK formülasyonları ile tam beslenme.</p>
-          <div style="display:flex;gap:0.45rem;flex-wrap:wrap;">
-            <span style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);font-size:0.68rem;padding:0.18rem 0.55rem;border-radius:2px;">15-15-15</span>
-            <span style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);font-size:0.68rem;padding:0.18rem 0.55rem;border-radius:2px;">20-20-0</span>
-            <span style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);font-size:0.68rem;padding:0.18rem 0.55rem;border-radius:2px;">12-24-12</span>
-          </div>
-          <div style="margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;">
-            <span style="color:var(--c-amber-300);font-size:0.8rem;font-weight:600;letter-spacing:0.04em;">Detayları Gör</span>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--c-amber-300)" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </div>
-        </div>
-
-        <!-- Card: Yaprak -->
-        <div class="product-card fade-up" tabindex="0" style="background:rgba(255,255,255,0.055);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:2rem;cursor:pointer;backdrop-filter:blur(4px);">
-          <div style="width:54px;height:54px;background:rgba(78,166,36,0.1);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;border:1px solid rgba(78,166,36,0.18);">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#9FE07A" stroke-width="2" stroke-linecap="round"><path d="M12 22c0 0-8-5-8-12A8 8 0 0120 10c0 7-8 12-8 12z"/><path d="M12 10v12"/></svg>
-          </div>
-          <span class="cat-tag" style="background:rgba(78,166,36,0.1);color:#9FE07A;border:1px solid rgba(78,166,36,0.18);">Yapraktan Uygulama</span>
-          <h3 style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:#fff;margin:0.75rem 0;">Yaprak Gübreler</h3>
-          <p style="color:rgba(255,255,255,0.52);font-size:0.875rem;line-height:1.72;margin-bottom:1.25rem;">Hızlı etki ve yüksek verimlilik için yapraktan uygulama gübrelerimiz. Stres dönemlerinde bitkiye anında destek ve takviye.</p>
-          <div style="display:flex;gap:0.45rem;flex-wrap:wrap;">
-            <span style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);font-size:0.68rem;padding:0.18rem 0.55rem;border-radius:2px;">Makro</span>
-            <span style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);font-size:0.68rem;padding:0.18rem 0.55rem;border-radius:2px;">Mikro Element</span>
-            <span style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);font-size:0.68rem;padding:0.18rem 0.55rem;border-radius:2px;">Amino Asit</span>
-          </div>
-          <div style="margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;">
-            <span style="color:var(--c-amber-300);font-size:0.8rem;font-weight:600;letter-spacing:0.04em;">Detayları Gör</span>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--c-amber-300)" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </div>
-        </div>
-
-        <!-- Card: Organik -->
-        <div class="product-card fade-up" tabindex="0" style="background:rgba(255,255,255,0.055);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:2rem;cursor:pointer;backdrop-filter:blur(4px);">
-          <div style="width:54px;height:54px;background:rgba(201,122,8,0.12);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;border:1px solid rgba(201,122,8,0.2);">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#D4A050" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-          </div>
-          <span class="cat-tag" style="background:rgba(201,122,8,0.1);color:#E8B96F;border:1px solid rgba(201,122,8,0.18);">Organik &amp; Doğal</span>
-          <h3 style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:#fff;margin:0.75rem 0;">Organik Gübreler</h3>
-          <p style="color:rgba(255,255,255,0.52);font-size:0.875rem;line-height:1.72;margin-bottom:1.25rem;">Doğal kaynaklar ve organik madde zengin formülasyonlarımızla toprağın biyolojik yapısını güçlendirin. Sertifikalı organik tarım uyumlu.</p>
-          <div style="display:flex;gap:0.45rem;flex-wrap:wrap;">
-            <span style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);font-size:0.68rem;padding:0.18rem 0.55rem;border-radius:2px;">Hümik Asit</span>
-            <span style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);font-size:0.68rem;padding:0.18rem 0.55rem;border-radius:2px;">Fulvat</span>
-            <span style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);font-size:0.68rem;padding:0.18rem 0.55rem;border-radius:2px;">Organik-K</span>
-          </div>
-          <div style="margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;">
-            <span style="color:var(--c-amber-300);font-size:0.8rem;font-weight:600;letter-spacing:0.04em;">Detayları Gör</span>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--c-amber-300)" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </div>
-        </div>
-
-      </div>
+      <!-- Dynamic product grid -->
+      <div id="product-grid" class="product-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;"></div>
 
       <div style="text-align:center;margin-top:3rem;" class="fade-up">
         <a href="#iletisim" class="btn-amber">Tüm Ürün Kataloğunu İnceleyin</a>
@@ -852,6 +808,43 @@
     </div>
   </footer>
 
+  <!-- ════════════════ PRODUCT MODAL ════════════════ -->
+  <div id="product-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-name">
+    <div class="modal-box">
+      <!-- image strip -->
+      <div style="background:#EAF3DE;height:260px;display:flex;align-items:center;justify-content:center;position:relative;">
+        <img id="modal-img" src="" alt="" style="max-height:220px;max-width:80%;object-fit:contain;">
+        <button id="modal-close" class="modal-close-btn" aria-label="Kapat">&#10005;</button>
+        <div id="modal-new-badge" style="display:none;position:absolute;top:1rem;left:1rem;background:var(--c-amber-500);color:#fff;font-size:0.7rem;font-weight:700;padding:0.25rem 0.7rem;border-radius:2px;letter-spacing:0.1em;">YENİ</div>
+      </div>
+      <!-- content -->
+      <div style="padding:2rem 2.5rem 2.5rem;">
+        <div id="modal-category-tag" style="margin-bottom:0.75rem;"></div>
+        <h2 id="modal-name" style="font-family:'Playfair Display',serif;font-size:1.75rem;font-weight:800;color:#fff;letter-spacing:-0.02em;margin-bottom:0.3rem;line-height:1.2;"></h2>
+        <div id="modal-brand" style="color:rgba(255,255,255,0.4);font-size:0.78rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1.5rem;"></div>
+        <p id="modal-longdesc" style="color:rgba(255,255,255,0.68);font-size:0.9rem;line-height:1.75;margin-bottom:1.75rem;"></p>
+
+        <div id="modal-specs-section" style="margin-bottom:1.75rem;">
+          <div style="font-size:0.72rem;font-weight:700;color:rgba(255,255,255,0.45);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid rgba(255,255,255,0.08);">Garanti İçerik</div>
+          <table style="width:100%;border-collapse:collapse;">
+            <tbody id="modal-specs"></tbody>
+          </table>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+          <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:1rem 1.25rem;">
+            <div style="font-size:0.7rem;font-weight:700;color:rgba(255,255,255,0.4);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.4rem;">Dozaj</div>
+            <div id="modal-dose" style="color:#fff;font-size:0.9rem;font-weight:500;"></div>
+          </div>
+          <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:1rem 1.25rem;">
+            <div style="font-size:0.7rem;font-weight:700;color:rgba(255,255,255,0.4);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.4rem;">Ambalaj</div>
+            <div id="modal-packaging" style="color:#fff;font-size:0.9rem;font-weight:500;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     // Nav scroll effect
     const navbar = document.getElementById('navbar');
@@ -895,6 +888,186 @@
         el.style.boxShadow = 'none';
       });
     });
+  </script>
+  <script>
+  (function () {
+    const API = 'http://localhost:3001/api/products';
+    const grid = document.getElementById('product-grid');
+    const filterBar = document.getElementById('filter-bar');
+
+    // ── Category filter definitions ──────────────────────────────────
+    const FILTERS = [
+      { label: 'Tümü',           value: '' },
+      { label: 'Kalsiyum & Bor', value: 'Kalsiyum & Bor' },
+      { label: 'NP Gübre',       value: 'NP Gübre' },
+      { label: 'Bakırlı Gübre',  value: 'Bakırlı Gübre' },
+      { label: 'Organomineral',  value: 'Organomineral' },
+      { label: 'Mikro Element',  value: 'Mikro Element' },
+    ];
+
+    // Build filter buttons
+    FILTERS.forEach(function (f) {
+      const btn = document.createElement('button');
+      btn.className = 'filter-btn' + (f.value === '' ? ' active' : '');
+      btn.textContent = f.label;
+      btn.addEventListener('click', function () {
+        filterBar.querySelectorAll('.filter-btn').forEach(function (b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        fetchProducts(f.value);
+      });
+      filterBar.appendChild(btn);
+    });
+
+    // ── Category colour helper ───────────────────────────────────────
+    function catStyle(cat) {
+      if (!cat) return { bg: 'rgba(255,255,255,0.08)', text: 'rgba(255,255,255,0.7)', border: 'rgba(255,255,255,0.15)' };
+      const c = cat.toLowerCase();
+      if (c.includes('kalsiyum') || c.includes('bor'))
+        return { bg: 'rgba(232,146,15,0.14)', text: 'var(--c-amber-300)', border: 'rgba(232,146,15,0.22)' };
+      if (c.includes('bakır'))
+        return { bg: 'rgba(78,166,36,0.14)', text: '#9FE07A', border: 'rgba(78,166,36,0.22)' };
+      if (c.includes('np') || c.includes('fosfor'))
+        return { bg: 'rgba(78,166,36,0.1)', text: '#9FE07A', border: 'rgba(78,166,36,0.18)' };
+      if (c.includes('mikro'))
+        return { bg: 'rgba(201,122,8,0.12)', text: '#E8B96F', border: 'rgba(201,122,8,0.2)' };
+      return { bg: 'rgba(255,255,255,0.07)', text: 'rgba(255,255,255,0.65)', border: 'rgba(255,255,255,0.12)' };
+    }
+
+    // ── Loading state ────────────────────────────────────────────────
+    function showLoading() {
+      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:4rem 2rem;">'
+        + '<div class="spinner"></div>'
+        + '<p style="color:rgba(255,255,255,0.45);margin-top:1.25rem;font-size:0.875rem;">Ürünler yükleniyor...</p>'
+        + '</div>';
+    }
+
+    function showError() {
+      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:4rem 2rem;">'
+        + '<div style="font-size:2.5rem;margin-bottom:1rem;">&#9888;</div>'
+        + '<p style="color:rgba(255,255,255,0.55);font-size:0.95rem;font-weight:500;">API\'ye ulaşılamıyor.</p>'
+        + '<p style="color:rgba(255,255,255,0.35);font-size:0.85rem;margin-top:0.5rem;">Lütfen sunucunun çalıştığını kontrol edin (port 3001).</p>'
+        + '</div>';
+    }
+
+    function showEmpty() {
+      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:4rem 2rem;">'
+        + '<p style="color:rgba(255,255,255,0.45);font-size:0.9rem;">Bu kategoride ürün bulunamadı.</p>'
+        + '</div>';
+    }
+
+    // ── Fetch ────────────────────────────────────────────────────────
+    var _products = [];
+
+    function fetchProducts(category) {
+      showLoading();
+      var url = category ? API + '?category=' + encodeURIComponent(category) : API;
+      fetch(url)
+        .then(function (res) {
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          return res.json();
+        })
+        .then(function (data) {
+          _products = data;
+          renderProducts(data);
+        })
+        .catch(function () {
+          showError();
+        });
+    }
+
+    // ── Card rendering ───────────────────────────────────────────────
+    function renderProducts(products) {
+      if (!products.length) { showEmpty(); return; }
+      var cs = catStyle;
+      grid.innerHTML = products.map(function (p, i) {
+        var s = cs(p.category);
+        var newBadge = p.isNewProduct
+          ? '<div style="position:absolute;top:8px;right:8px;background:var(--c-amber-500);color:#fff;font-size:0.62rem;font-weight:700;padding:0.22rem 0.6rem;border-radius:2px;letter-spacing:0.09em;text-transform:uppercase;box-shadow:0 2px 8px rgba(201,122,8,0.45);">YENİ</div>'
+          : '';
+        return '<div class="product-card" tabindex="0" data-idx="' + i + '" style="background:rgba(255,255,255,0.055);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:1.75rem;cursor:pointer;backdrop-filter:blur(4px);display:flex;flex-direction:column;">'
+          + '<div style="background:#EAF3DE;border-radius:8px;margin-bottom:1.25rem;overflow:hidden;height:158px;display:flex;align-items:center;justify-content:center;position:relative;flex-shrink:0;">'
+          + '<img src="brand_assets/images/' + (p.image || '') + '" alt="' + esc(p.name) + '" style="max-height:136px;max-width:85%;object-fit:contain;display:block;" loading="lazy" onerror="this.style.opacity=0">'
+          + newBadge
+          + '</div>'
+          + '<span class="cat-tag" style="background:' + s.bg + ';color:' + s.text + ';border:1px solid ' + s.border + ';">' + esc(p.category) + '</span>'
+          + '<h3 style="font-family:\'Playfair Display\',serif;font-size:1.15rem;font-weight:700;color:#fff;margin:0.7rem 0 0.25rem;">' + esc(p.name) + '</h3>'
+          + '<div style="color:rgba(255,255,255,0.38);font-size:0.72rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem;">' + esc(p.brand) + '</div>'
+          + '<p style="color:rgba(255,255,255,0.52);font-size:0.875rem;line-height:1.72;flex:1;">' + esc(p.shortDesc || '') + '</p>'
+          + '<div style="margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;">'
+          + '<span style="color:var(--c-amber-300);font-size:0.8rem;font-weight:600;letter-spacing:0.04em;">İncele</span>'
+          + '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--c-amber-300)" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>'
+          + '</div>'
+          + '</div>';
+      }).join('');
+
+      grid.querySelectorAll('.product-card').forEach(function (card) {
+        var idx = parseInt(card.dataset.idx, 10);
+        card.addEventListener('click', function () { openModal(_products[idx]); });
+        card.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(_products[idx]); }
+        });
+      });
+    }
+
+    function esc(str) {
+      return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    // ── Modal ────────────────────────────────────────────────────────
+    var modal        = document.getElementById('product-modal');
+    var modalClose   = document.getElementById('modal-close');
+    var modalImg     = document.getElementById('modal-img');
+    var modalName    = document.getElementById('modal-name');
+    var modalBrand   = document.getElementById('modal-brand');
+    var modalCatTag  = document.getElementById('modal-category-tag');
+    var modalDesc    = document.getElementById('modal-longdesc');
+    var modalSpecs   = document.getElementById('modal-specs');
+    var modalSpecsSec= document.getElementById('modal-specs-section');
+    var modalDose    = document.getElementById('modal-dose');
+    var modalPack    = document.getElementById('modal-packaging');
+    var modalNewBadge= document.getElementById('modal-new-badge');
+
+    function openModal(p) {
+      var s = catStyle(p.category);
+      modalImg.src = 'brand_assets/images/' + (p.image || '');
+      modalImg.alt = p.name;
+      modalNewBadge.style.display = p.isNewProduct ? '' : 'none';
+      modalCatTag.innerHTML = '<span class="cat-tag" style="background:' + s.bg + ';color:' + s.text + ';border:1px solid ' + s.border + ';">' + esc(p.category) + '</span>';
+      modalName.textContent  = p.name;
+      modalBrand.textContent = p.brand;
+      modalDesc.textContent  = p.longDesc || p.shortDesc || '';
+      modalDose.textContent  = p.dose || '—';
+      modalPack.textContent  = p.packaging || '—';
+
+      if (p.specs && p.specs.length) {
+        modalSpecs.innerHTML = p.specs.map(function (sp) {
+          return '<tr>'
+            + '<td style="padding:0.55rem 1.5rem 0.55rem 0;color:rgba(255,255,255,0.45);font-size:0.82rem;white-space:nowrap;vertical-align:top;">' + esc(sp.label) + '</td>'
+            + '<td style="padding:0.55rem 0;color:#fff;font-size:0.875rem;font-weight:500;">' + esc(sp.value) + '</td>'
+            + '</tr>';
+        }).join('');
+        modalSpecsSec.style.display = '';
+      } else {
+        modalSpecsSec.style.display = 'none';
+      }
+
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      modalClose.focus();
+    }
+
+    function closeModal() {
+      modal.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    modalClose.addEventListener('click', closeModal);
+    modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+
+    // ── Initial load ─────────────────────────────────────────────────
+    fetchProducts('');
+  })();
   </script>
 </body>
 </html>
