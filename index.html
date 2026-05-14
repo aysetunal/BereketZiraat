@@ -696,7 +696,7 @@
           <h3 style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:#fff;margin-bottom:0.5rem;">Teklif Talep Formu</h3>
           <p style="color:rgba(255,255,255,0.5);font-size:0.85rem;margin-bottom:2rem;">24 saat içinde dönüş yapıyoruz.</p>
 
-          <form style="display:flex;flex-direction:column;gap:1.25rem;" onsubmit="return false;">
+          <form id="teklif-form" style="display:flex;flex-direction:column;gap:1.25rem;">
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
               <div>
                 <label style="display:block;color:rgba(255,255,255,0.65);font-size:0.75rem;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;margin-bottom:0.45rem;">Ad Soyad</label>
@@ -731,7 +731,8 @@
               <label style="display:block;color:rgba(255,255,255,0.65);font-size:0.75rem;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;margin-bottom:0.45rem;">Mesajınız</label>
               <textarea rows="4" placeholder="Arazi büyüklüğü, yetiştirdiğiniz ürün ve gübre ihtiyaçlarınızı belirtin..." style="width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);border-radius:6px;padding:0.72rem 1rem;color:#fff;font-size:0.9rem;font-family:'Inter',sans-serif;outline:none;resize:vertical;transition:border-color 0.2s,box-shadow 0.2s;"></textarea>
             </div>
-            <button type="submit" class="btn-amber" style="width:100%;padding:0.9rem;font-size:0.95rem;border-radius:6px;">Teklif Talep Et &#8594;</button>
+            <div id="teklif-feedback" style="display:none;padding:0.65rem 1rem;border-radius:6px;font-size:0.875rem;border:1px solid;"></div>
+            <button id="teklif-submit-btn" type="submit" class="btn-amber" style="width:100%;padding:0.9rem;font-size:0.95rem;border-radius:6px;">Teklif Talep Et &#8594;</button>
           </form>
         </div>
 
@@ -1064,6 +1065,59 @@
     modalClose.addEventListener('click', closeModal);
     modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+
+    // ── Teklif form ───────────────────────────────────────────────────
+    var teklifForm = document.getElementById('teklif-form');
+    teklifForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var btn      = document.getElementById('teklif-submit-btn');
+      var feedback = document.getElementById('teklif-feedback');
+      var ad       = teklifForm.querySelector('input[type="text"]').value.trim();
+      var telefon  = teklifForm.querySelector('input[type="tel"]').value.trim();
+      var email    = teklifForm.querySelector('input[type="email"]').value.trim();
+      var gubre    = teklifForm.querySelector('select').value;
+      var mesaj    = teklifForm.querySelector('textarea').value.trim();
+
+      feedback.style.display = 'none';
+      if (!ad) {
+        feedback.style.background = 'rgba(192,57,43,0.15)';
+        feedback.style.borderColor = 'rgba(192,57,43,0.3)';
+        feedback.style.color = '#FF7F7F';
+        feedback.textContent = 'Lütfen adınızı ve soyadınızı girin.';
+        feedback.style.display = '';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Gönderiliyor...';
+
+      fetch('http://localhost:3001/api/teklif', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ad: ad, telefon: telefon, email: email, gubreTuru: gubre, mesaj: mesaj }),
+      })
+        .then(function (res) { return res.json().then(function (d) { return { ok: res.ok, d: d }; }); })
+        .then(function (r) {
+          if (r.ok) {
+            teklifForm.innerHTML = '<div style="text-align:center;padding:2.5rem 1rem;">'
+              + '<div style="font-size:2.5rem;margin-bottom:1rem;">&#10003;</div>'
+              + '<div style="font-family:\'Playfair Display\',serif;font-size:1.25rem;font-weight:700;color:#fff;margin-bottom:0.5rem;">Talebiniz Alındı!</div>'
+              + '<p style="color:rgba(255,255,255,0.55);font-size:0.9rem;line-height:1.7;">24 saat içinde sizinle iletişime geçeceğiz.</p>'
+              + '</div>';
+          } else {
+            throw new Error(r.d.message || 'Bir hata oluştu.');
+          }
+        })
+        .catch(function (err) {
+          btn.disabled = false;
+          btn.textContent = 'Teklif Talep Et →';
+          feedback.style.background = 'rgba(192,57,43,0.15)';
+          feedback.style.borderColor = 'rgba(192,57,43,0.3)';
+          feedback.style.color = '#FF7F7F';
+          feedback.textContent = err.message || 'Sunucuya bağlanılamadı. Lütfen tekrar deneyin.';
+          feedback.style.display = '';
+        });
+    });
 
     // ── Initial load ─────────────────────────────────────────────────
     fetchProducts('');

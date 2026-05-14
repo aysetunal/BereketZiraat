@@ -386,6 +386,35 @@
     .spin { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.2); border-top-color: #fff; border-radius: 50%; animation: spin 0.65s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
+    /* ── Tabs ── */
+    .tab-nav { background: var(--green-950); border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .tab-nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 2rem; display: flex; }
+    .tab-btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.82rem 1.2rem;
+      background: none; border: none; border-bottom: 2px solid transparent;
+      color: rgba(255,255,255,0.45); font-size: 0.875rem; font-weight: 600;
+      font-family: 'Inter', sans-serif; cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+      margin-bottom: -1px; white-space: nowrap;
+    }
+    .tab-btn:hover { color: rgba(255,255,255,0.8); }
+    .tab-btn.active { color: #fff; border-bottom-color: var(--amber); }
+    .tab-btn:focus-visible { outline: 2px solid var(--amber-light); outline-offset: -2px; }
+    .tab-badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: var(--amber); color: #fff;
+      border-radius: 10px; font-size: 0.6rem; font-weight: 700;
+      min-width: 18px; height: 18px; padding: 0 5px; line-height: 1;
+    }
+    /* teklif table */
+    .teklif-msg { max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .badge-yeni { display: inline-block; background: rgba(232,151,26,0.15); color: var(--amber-dark); border: 1px solid rgba(232,151,26,0.3); border-radius: 3px; font-size: 0.62rem; font-weight: 700; padding: 0.15rem 0.45rem; letter-spacing: 0.08em; text-transform: uppercase; }
+    .badge-okundu { display: inline-block; background: rgba(39,80,10,0.08); color: var(--green-700); border: 1px solid rgba(39,80,10,0.18); border-radius: 3px; font-size: 0.62rem; font-weight: 700; padding: 0.15rem 0.45rem; letter-spacing: 0.06em; text-transform: uppercase; }
+    .btn-read { display: inline-flex; align-items: center; gap: 0.3rem; background: rgba(39,80,10,0.12); color: #5eb85e; border: 1px solid rgba(39,80,10,0.25); border-radius: 7px; padding: 0.45rem 0.7rem; font-size: 0.75rem; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; transition: background-color 0.2s; }
+    .btn-read:hover { background: rgba(39,80,10,0.22); }
+    .btn-read:focus-visible { outline: 2px solid #5eb85e; outline-offset: 2px; }
+
     /* ── Responsive ── */
     @media (max-width: 640px) {
       .form-grid { grid-template-columns: 1fr; }
@@ -444,8 +473,24 @@
       </button>
     </header>
 
+    <!-- Tab nav -->
+    <nav class="tab-nav">
+      <div class="tab-nav-inner">
+        <button class="tab-btn active" id="tab-btn-urunler">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+          Ürünler
+        </button>
+        <button class="tab-btn" id="tab-btn-teklifler">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          Teklif Talepleri
+          <span class="tab-badge" id="teklif-unread-badge" style="display:none;"></span>
+        </button>
+      </div>
+    </nav>
+
     <!-- Main -->
     <main class="main-content">
+      <div id="section-urunler">
       <div class="section-header">
         <div>
           <h1 class="section-title">Ürün Yönetimi</h1>
@@ -482,6 +527,43 @@
           </tbody>
         </table>
       </div>
+      </div><!-- /section-urunler -->
+
+      <div id="section-teklifler" style="display:none;">
+        <div class="section-header">
+          <div>
+            <h1 class="section-title">Teklif Talepleri</h1>
+            <p class="section-sub" id="teklif-count">Yükleniyor...</p>
+          </div>
+          <button class="btn-primary" id="csv-download-btn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            CSV İndir
+          </button>
+        </div>
+        <div class="table-wrap">
+          <table id="teklifler-table">
+            <thead>
+              <tr>
+                <th>Tarih</th>
+                <th>Ad Soyad</th>
+                <th>Telefon</th>
+                <th>E-posta</th>
+                <th>Gübre Türü</th>
+                <th>Mesaj</th>
+                <th>Durum</th>
+                <th style="text-align:right;">İşlemler</th>
+              </tr>
+            </thead>
+            <tbody id="teklifler-body">
+              <tr>
+                <td colspan="8">
+                  <div class="state-box"><div class="icon">&#9719;</div><p>Yükleniyor...</p></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div><!-- /section-teklifler -->
     </main>
   </div>
 
@@ -667,6 +749,7 @@
       loginScreen.style.display = 'none';
       app.classList.add('visible');
       loadProducts();
+      fetchUnreadCount();
     }
 
     function showLogin() {
@@ -1007,6 +1090,122 @@
         saveSpin.style.display = 'none';
       }
     });
+    // ── Tabs ─────────────────────────────────────────────────────────
+    var tabBtnUrunler   = document.getElementById('tab-btn-urunler');
+    var tabBtnTeklifler = document.getElementById('tab-btn-teklifler');
+    var secUrunler      = document.getElementById('section-urunler');
+    var secTeklifler    = document.getElementById('section-teklifler');
+
+    function switchTab(name) {
+      if (name === 'teklifler') {
+        tabBtnTeklifler.classList.add('active');
+        tabBtnUrunler.classList.remove('active');
+        secTeklifler.style.display = '';
+        secUrunler.style.display = 'none';
+        loadTeklifler();
+      } else {
+        tabBtnUrunler.classList.add('active');
+        tabBtnTeklifler.classList.remove('active');
+        secUrunler.style.display = '';
+        secTeklifler.style.display = 'none';
+      }
+    }
+
+    tabBtnUrunler.addEventListener('click', function () { switchTab('urunler'); });
+    tabBtnTeklifler.addEventListener('click', function () { switchTab('teklifler'); });
+
+    // ── Teklifler list ────────────────────────────────────────────────
+    function loadTeklifler() {
+      var tbody = document.getElementById('teklifler-body');
+      tbody.innerHTML = '<tr><td colspan="8"><div class="state-box"><div class="icon">&#9719;</div><p>Yükleniyor...</p></div></td></tr>';
+      fetch(API + '/admin/teklifler', { headers: authHeaders() })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          renderTeklifler(data);
+          updateUnreadBadge(data);
+        })
+        .catch(function () {
+          document.getElementById('teklifler-body').innerHTML = '<tr><td colspan="8"><div class="state-box"><div class="icon">&#9888;</div><p>Teklifler yüklenemedi.</p></div></td></tr>';
+        });
+    }
+
+    function updateUnreadBadge(data) {
+      var badge = document.getElementById('teklif-unread-badge');
+      var count = data.filter(function (t) { return !t.okundu; }).length;
+      document.getElementById('teklif-count').textContent = data.length + ' talep' + (count ? ', ' + count + ' yeni' : '');
+      badge.textContent = count;
+      badge.style.display = count > 0 ? '' : 'none';
+    }
+
+    function renderTeklifler(teklifler) {
+      var tbody = document.getElementById('teklifler-body');
+      if (!teklifler.length) {
+        tbody.innerHTML = '<tr><td colspan="8"><div class="state-box"><div class="icon">&#128235;</div><p>Henüz teklif talebi alınmamış.</p></div></td></tr>';
+        return;
+      }
+      tbody.innerHTML = teklifler.map(function (t) {
+        var date = new Date(t.createdAt).toLocaleString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+        var statusBadge = t.okundu ? '<span class="badge-okundu">Okundu</span>' : '<span class="badge-yeni">Yeni</span>';
+        var readBtn = t.okundu ? '' : '<button class="btn-read mark-read-btn" data-id="' + t._id + '">&#10003; Okundu</button> ';
+        return '<tr>'
+          + '<td style="white-space:nowrap;color:var(--text-muted);font-size:0.8rem;">' + esc(date) + '</td>'
+          + '<td style="font-weight:' + (t.okundu ? '400' : '600') + ';">' + esc(t.ad || '—') + '</td>'
+          + '<td>' + esc(t.telefon || '—') + '</td>'
+          + '<td>' + esc(t.email || '—') + '</td>'
+          + '<td>' + esc(t.gubreTuru || '—') + '</td>'
+          + '<td><div class="teklif-msg" title="' + esc(t.mesaj || '') + '">' + esc(t.mesaj || '—') + '</div></td>'
+          + '<td>' + statusBadge + '</td>'
+          + '<td><div class="actions" style="justify-content:flex-end;">' + readBtn
+          + '<button class="btn-danger delete-teklif-btn" data-id="' + t._id + '">'
+          + '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>'
+          + 'Sil</button></div></td>'
+          + '</tr>';
+      }).join('');
+
+      tbody.querySelectorAll('.mark-read-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          apiFetch(API + '/admin/teklifler/' + btn.dataset.id + '/oku', { method: 'PUT', headers: authHeaders() })
+            .then(function () { loadTeklifler(); })
+            .catch(function (err) { toast(err.message, true); });
+        });
+      });
+      tbody.querySelectorAll('.delete-teklif-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          if (!confirm('Bu talebi silmek istediğinizden emin misiniz?')) return;
+          apiFetch(API + '/admin/teklifler/' + btn.dataset.id, { method: 'DELETE', headers: authHeaders() })
+            .then(function () { toast('Talep silindi.'); loadTeklifler(); })
+            .catch(function (err) { toast(err.message, true); });
+        });
+      });
+    }
+
+    function fetchUnreadCount() {
+      if (!getToken()) return;
+      fetch(API + '/admin/teklifler', { headers: authHeaders() })
+        .then(function (res) { return res.json(); })
+        .then(updateUnreadBadge)
+        .catch(function () {});
+    }
+
+    document.getElementById('csv-download-btn').addEventListener('click', function () {
+      fetch(API + '/admin/teklifler/csv', { headers: authHeaders() })
+        .then(function (res) {
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          return res.blob();
+        })
+        .then(function (blob) {
+          var url = URL.createObjectURL(blob);
+          var a = document.createElement('a');
+          a.href = url;
+          a.download = 'teklifler.csv';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        })
+        .catch(function (err) { toast('CSV indirilemedi: ' + err.message, true); });
+    });
+
   })();
   </script>
 </body>

@@ -74,4 +74,59 @@ router.delete('/products/:id', auth, async function (req, res) {
   }
 });
 
+const Teklif = require('../models/Teklif');
+
+router.get('/teklifler/csv', auth, async function (req, res) {
+  try {
+    const teklifler = await Teklif.find().sort({ createdAt: -1 });
+    const headers = ['Tarih', 'Ad Soyad', 'Telefon', 'E-posta', 'Gübre Türü', 'Mesaj', 'Durum'];
+    const rows = teklifler.map(function (t) {
+      return [
+        new Date(t.createdAt).toLocaleString('tr-TR'),
+        t.ad || '',
+        t.telefon || '',
+        t.email || '',
+        t.gubreTuru || '',
+        (t.mesaj || '').replace(/[\r\n]+/g, ' '),
+        t.okundu ? 'Okundu' : 'Yeni',
+      ].map(function (v) { return '"' + String(v).replace(/"/g, '""') + '"'; }).join(',');
+    });
+    const csv = '﻿' + [headers.join(',')].concat(rows).join('\r\n');
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', 'attachment; filename="teklifler.csv"');
+    res.send(csv);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+router.get('/teklifler', auth, async function (req, res) {
+  try {
+    const teklifler = await Teklif.find().sort({ createdAt: -1 });
+    res.json(teklifler);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+router.put('/teklifler/:id/oku', auth, async function (req, res) {
+  try {
+    const t = await Teklif.findByIdAndUpdate(req.params.id, { okundu: true }, { new: true });
+    if (!t) return res.status(404).json({ message: 'Teklif bulunamadı' });
+    res.json(t);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+router.delete('/teklifler/:id', auth, async function (req, res) {
+  try {
+    const t = await Teklif.findByIdAndDelete(req.params.id);
+    if (!t) return res.status(404).json({ message: 'Teklif bulunamadı' });
+    res.json({ message: 'Teklif silindi' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 module.exports = router;
