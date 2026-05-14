@@ -11,10 +11,17 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '..')));
 
-connectDB().catch(err => console.error('MongoDB bağlantı hatası:', err.message));
-
 app.use('/api/products', productRoutes);
 app.use('/api/admin', adminRoutes);
 
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+(async () => {
+  try {
+    await connectDB();
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+  } catch (err) {
+    console.error('MongoDB bağlantı hatası:', err.message);
+    process.exit(1);
+  }
+})();
