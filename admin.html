@@ -708,7 +708,7 @@
   (function () {
     'use strict';
 
-    var API_BASE = 'https://bereket-ziraat-api.onrender.com';
+    var API_BASE = 'http://localhost:3001';
     var API   = API_BASE + '/api';
     var TOKEN_KEY = 'bz_admin_token';
 
@@ -818,7 +818,7 @@
         return;
       }
       tbody.innerHTML = products.map(function (p) {
-        var imgSrc = p.image ? 'brand_assets/images/' + p.image : '';
+        var imgSrc = p.image ? (p.image.startsWith('http') ? p.image : API_BASE + '/brand_assets/images/' + p.image) : '';
         var imgEl = imgSrc
           ? '<img class="table-img" src="' + imgSrc + '" alt="' + esc(p.name) + '" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">'
             + '<div class="table-img-placeholder" style="display:none;">&#127807;</div>'

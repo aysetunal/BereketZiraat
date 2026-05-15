@@ -1,22 +1,15 @@
 const router = require('express').Router();
 const multer = require('multer');
-const path = require('path');
 const crypto = require('crypto');
+const cloudinary = require('cloudinary').v2;
 const Product = require('../models/Product');
 
 const ADMIN_USER = 'admin';
 const ADMIN_PASS = 'bereket2025';
 const TOKEN = crypto.createHash('sha256').update(ADMIN_USER + ':' + ADMIN_PASS).digest('hex');
 
-const storage = multer.diskStorage({
-  destination: path.join(__dirname, '../../brand_assets/images'),
-  filename: function (req, file, cb) {
-    const ext = path.extname(file.originalname).toLowerCase();
-    cb(null, Date.now() + ext);
-  },
-});
 const upload = multer({
-  storage,
+  storage: multer.memoryStorage(),
   fileFilter: function (req, file, cb) {
     if (/^image\/(jpeg|png|webp|gif)$/.test(file.mimetype)) cb(null, true);
     else cb(new Error('Sadece görsel dosyası kabul edilir'));
@@ -41,7 +34,14 @@ router.post('/login', function (req, res) {
 
 router.post('/upload', auth, upload.single('image'), function (req, res) {
   if (!req.file) return res.status(400).json({ message: 'Dosya yüklenemedi' });
-  res.json({ filename: req.file.filename });
+  const stream = cloudinary.uploader.upload_stream(
+    { folder: 'bereket-ziraat', resource_type: 'image' },
+    function (error, result) {
+      if (error) return res.status(500).json({ message: error.message });
+      res.json({ filename: result.secure_url });
+    }
+  );
+  stream.end(req.file.buffer);
 });
 
 router.post('/products', auth, async function (req, res) {
